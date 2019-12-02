@@ -14,9 +14,9 @@ using namespace std;
 
 namespace day2 {
 
-    constexpr int add = 1;
-    constexpr int mul = 2;
-    constexpr int fin = 99;
+    enum opcode {
+        add = 1, mul = 2, fin = 99
+    };
 
 
     map<int, function<int(int, int)>> operations {
