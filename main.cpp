@@ -6,6 +6,7 @@
 
 #include "day01/puzzle.h"
 #include "day02/puzzle.h"
+#include "day03/puzzle.h"
 
 using namespace std;
 

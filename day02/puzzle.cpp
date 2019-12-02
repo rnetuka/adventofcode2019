@@ -38,10 +38,8 @@ namespace day2 {
         return result;
     }
 
-    int run_code(int noun, int verb)
+    int run_code(vector<int> input, int noun, int verb)
     {
-        vector<int> input = read_input();
-
         input[1] = noun;
         input[2] = verb;
 
@@ -68,13 +66,13 @@ namespace day2 {
         return input[0];
     }
 
-    int decode()
+    int decode(vector<int> input)
     {
         int expected_result = 19690720;
 
         for (int noun = 0; noun < 99; noun++)
             for (int verb = 0; verb < 99; verb++)
-                if (run_code(noun, verb) == expected_result)
+                if (run_code(input, noun, verb) == expected_result)
                     return 100 * noun + verb;
 
         return -1;
