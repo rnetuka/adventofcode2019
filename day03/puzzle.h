@@ -2,7 +2,11 @@
 // Created by rnetuka on 02.12.19.
 //
 
-#ifndef ADVENTOFCODE2019_PUZZLE_H
-#define ADVENTOFCODE2019_PUZZLE_H
+#pragma once
 
-#endif //ADVENTOFCODE2019_PUZZLE_H
+namespace day3 {
+
+    int closest_intersection_distance();
+    int min_steps_to_reach_intersection();
+
+}
