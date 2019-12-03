@@ -16,4 +16,6 @@ int main()
     cout << "Day 1 2nd result: " << day1::recalculate_fuel() << "\n";
     cout << "Day 2 1st result: " << day2::run_code() << "\n";
     cout << "Day 2 2nd result: " << day2::decode() << "\n";
+    cout << "Day 3 1st result: " << day3::closest_intersection_distance() << "\n";
+    cout << "Day 3 2nd result: " << day3::min_steps_to_reach_intersection() << "\n";
 }
