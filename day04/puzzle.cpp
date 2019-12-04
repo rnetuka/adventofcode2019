@@ -119,13 +119,11 @@ namespace day4 {
         return count;
     }
 
-    int password_combinations1()
-    {
+    int password_combinations1() {
         return password_combinations(meets_criteria);
     }
 
-    int password_combinations2()
-    {
+    int password_combinations2() {
         return password_combinations(meets_additional_criteria);
     }
 
