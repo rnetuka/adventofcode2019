@@ -8,4 +8,5 @@ add_executable(adventofcode2019
         utils.h utils.cpp
         day01/puzzle.h day01/puzzle.cpp
         day02/puzzle.h day02/puzzle.cpp
-        day03/puzzle.h day03/puzzle.cpp)
+        day03/puzzle.h day03/puzzle.cpp
+        day04/puzzle.h day04/puzzle.cpp)
