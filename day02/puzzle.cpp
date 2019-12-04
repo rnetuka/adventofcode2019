@@ -10,7 +10,10 @@
 #include <string>
 #include <vector>
 
+#include "../utils.h"
+
 using namespace std;
+
 
 namespace day2 {
 
@@ -18,25 +21,11 @@ namespace day2 {
         add = 1, mul = 2, fin = 99
     };
 
-
     map<int, function<int(int, int)>> operations {
             { add, [](int a, int b) { return a + b; } },
             { mul, [](int a, int b) { return a * b; } }
     };
 
-
-    vector<int> read_input()
-    {
-        ifstream stream { "day02/res/input.txt" };
-
-        vector<int> result;
-        string token;
-        while (getline(stream, token, ','))
-            result.push_back(stoi(token));
-
-        stream.close();
-        return result;
-    }
 
     int run_code(vector<int> input, int noun, int verb)
     {
@@ -66,8 +55,18 @@ namespace day2 {
         return input[0];
     }
 
-    int decode(vector<int> input)
+    int run_code()
     {
+        vector<int> input = read_csv_input<int>("day02/res/input.txt");
+        int noun = 12;
+        int verb = 2;
+        return run_code(input, noun, verb);
+    }
+
+    int decode()
+    {
+        vector<int> input = read_csv_input<int>("day02/res/input.txt");
+
         int expected_result = 19690720;
 
         for (int noun = 0; noun < 99; noun++)
