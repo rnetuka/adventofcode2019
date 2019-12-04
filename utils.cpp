@@ -10,6 +10,24 @@ using namespace std;
 
 
 template <>
+vector<int> read_lines(const string& path)
+{
+    ifstream stream { path };
+
+    vector<int> values;
+
+    while (stream)
+    {
+        string line;
+        stream >> line;
+        if (! line.empty())
+            values.push_back(stoi(line));
+    }
+    stream.close();
+    return values;
+}
+
+template <>
 vector<string> read_csv_input(const string& path)
 {
     ifstream stream { path };
