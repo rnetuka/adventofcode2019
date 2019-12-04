@@ -18,6 +18,7 @@
  * 111111 meets these criteria (double 11, never decreases).
  * 223450 does not meet these criteria (decreasing pair of digits 50).
  * 123789 does not meet these criteria (no double).
+ *
  * How many different passwords within the range given in your puzzle input meet these criteria?
  *
  * Your puzzle input is 240920-789857.
@@ -31,6 +32,7 @@
  * 112233 meets these criteria because the digits never decrease and all repeated digits are exactly two digits long.
  * 123444 no longer meets the criteria (the repeated 44 is part of a larger group of 444).
  * 111122 meets the criteria (even though 1 is repeated more than twice, it still contains a double 22).
+ *
  * How many different passwords within the range given in your puzzle input meet all of the criteria?
  *
  * Your puzzle input is still 240920-789857.
@@ -78,10 +80,9 @@ namespace day4 {
         if (password.value < min_password || password.value > max_password)
             return false;
 
-        for (int last_digit = password.digit(0), i = 1; i < password_size; i++) {
-            if (password.digit(i) < last_digit)
+        for (int i = 0; i < password_size - 1; i++) {
+            if (password.digit(i) > password.digit(i + 1))
                 return false;
-            last_digit = password.digit(i);
         }
 
         for (int i = 0; i < password_size - 1; i++) {
@@ -99,7 +100,7 @@ namespace day4 {
 
         for (int i = 0; i < password_size - 1; i++) {
             if (password.digit(i) == password.digit(i + 1))
-                if (password.digit(i) != password.digit(i - 1) && password.digit(i) != password.digit(i + 2))
+                if (password.digit(i - 1) != password.digit(i) && password.digit(i + 1) != password.digit(i + 2))
                     return true;
         }
 
