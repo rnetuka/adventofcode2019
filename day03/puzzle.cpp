@@ -92,77 +92,30 @@
  */
 
 #include <algorithm>
-#include <functional>
-#include <map>
 #include <set>
-#include <string>
 #include <vector>
 
-#include "../utils.h"
+#include "wire.h"
 
 using namespace std;
 
+
 namespace day3 {
 
-    struct coords {
-        int x, y;
-    };
+    const vector<coords>& wireA = read_wire("day03/res/wire1.txt");
+    const vector<coords>& wireB = read_wire("day03/res/wire2.txt");
 
-    bool operator==(const coords& a, const coords& b) {
-        return a.x == b.x && a.y == b.y;
-    }
-
-    bool operator<(const coords& a, const coords& b) {
-        return (a.x == b.x) ? a.y < b.y : a.x < b.x;
-    }
-
-    const coords central_point { 0, 0 };
-
-    map<char, function<coords(coords, int)>> directions {
-        { 'R', [](coords start, int distance) { return coords { start.x + distance, start.y }; } },
-        { 'L', [](coords start, int distance) { return coords { start.x - distance, start.y }; } },
-        { 'U', [](coords start, int distance) { return coords { start.x, start.y + distance }; } },
-        { 'D', [](coords start, int distance) { return coords { start.x, start.y - distance }; } }
-    };
-
-    vector<coords> translate_to_coords(const vector<string>& wire);     // forward function declaration
-
-    const vector<coords> wireA = translate_to_coords(read_csv_input<string>("day03/res/wire1.txt"));
-    const vector<coords> wireB = translate_to_coords(read_csv_input<string>("day03/res/wire2.txt"));
-
-    vector<coords> translate_to_coords(const vector<string>& wire)
-    {
-        vector<coords> result { central_point };
-        coords wire_end = central_point;
-        for (const string& component : wire)
-        {
-            char direction = component[0];
-            int distance = stoi(component.substr(1));
-
-            for (int i = 0; i < distance; i++) {
-                auto f = directions[direction];
-                wire_end = f(wire_end, 1);
-                result.push_back(wire_end);
-            }
-        }
-        return result;
-    }
-
-    int distance(const coords& a, const coords& b)
-    {
-        return abs(a.x - b.x) + abs(a.y - b.y);
-    }
 
     vector<coords> intersection_points()
     {
         vector<coords> intersection(wireA.size());
 
-        set<coords> wireA_set { wireA.begin() + 1, wireA.end() };
-        set<coords> wireB_set { wireB.begin() + 1, wireB.end() };
+        set<coords> wireA_points { wireA.begin() + 1, wireA.end() };
+        set<coords> wireB_points { wireB.begin() + 1, wireB.end() };
 
         auto it = set_intersection(
-                wireA_set.begin(), wireA_set.end(),
-                wireB_set.begin(), wireB_set.end(),
+                wireA_points.begin(), wireA_points.end(),
+                wireB_points.begin(), wireB_points.end(),
                 intersection.begin());
 
         intersection.resize(it - intersection.begin());
@@ -179,9 +132,8 @@ namespace day3 {
         return distance(wire.begin(), it);
     }
 
-    int steps_to_reach_intersection(const coords& point)
-    {
-        return steps_to_reach_point(wireA, point) + steps_to_reach_point(wireB, point);
+    int steps_to_reach_intersection(const coords& intersection) {
+        return steps_to_reach_point(wireA, intersection) + steps_to_reach_point(wireB, intersection);
     }
 
     int closest_intersection_distance()
