@@ -8,10 +8,12 @@
 
 namespace day5 {
 
-    struct output
+    class output
     {
+    private:
         std::vector<int> values;
 
+    public:
         void operator<<(int value) {
             values.push_back(value);
         }
