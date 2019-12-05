@@ -8,6 +8,7 @@
 #include "day02/puzzle.h"
 #include "day03/puzzle.h"
 #include "day04/puzzle.h"
+#include "day05/puzzle.h"
 
 using namespace std;
 
@@ -21,4 +22,6 @@ int main()
     cout << "Day 3 2nd result: " << day3::min_steps_to_reach_intersection() << "\n";
     cout << "Day 4 1st result: " << day4::password_combinations1() << "\n";
     cout << "Day 4 2nd result: " << day4::password_combinations2() << "\n";
+    cout << "Day 5 1st result: " << day5::run_code({ 1 }) << "\n";
+    cout << "Day 5 1st result: " << day5::run_code({ 5 }) << "\n";
 }
