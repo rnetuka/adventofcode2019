@@ -17,4 +17,6 @@ add_executable(adventofcode2019
         day05/instruction.h
         day05/operation.h
         day05/parameter.h
-        day05/puzzle.h day05/puzzle.cpp)
+        day05/puzzle.h day05/puzzle.cpp
+        day06/graph.h
+        day06/puzzle.h day06/puzzle.cpp)

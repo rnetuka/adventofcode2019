@@ -8,6 +8,23 @@
 
 using namespace std;
 
+template <>
+vector<string> read_lines(const string& path)
+{
+    ifstream stream { path };
+
+    vector<string> values;
+
+    while (stream)
+    {
+        string line;
+        stream >> line;
+        if (! line.empty())
+            values.push_back(line);
+    }
+    stream.close();
+    return values;
+}
 
 template <>
 vector<int> read_lines(const string& path)
