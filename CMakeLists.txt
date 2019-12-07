@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(adventofcode2019
         main.cpp
         utils.h utils.cpp
-        intcode/computer.h
-        intcode/instruction.h
-        intcode/operation.h
+        intcode/computer.h intcode/computer.cpp
+        intcode/instruction.h intcode/instruction.cpp
+        intcode/operation.h intcode/operation.cpp
         intcode/output.h
         intcode/input.h
         intcode/parameter.h
@@ -18,11 +18,6 @@ add_executable(adventofcode2019
         day03/coords.h
         day03/wire.h
         day04/puzzle.h day04/puzzle.cpp
-        day05/input.h
-        day05/output.h
-        day05/instruction.h
-        day05/operation.h
-        day05/parameter.h
         day05/puzzle.h day05/puzzle.cpp
         day06/graph.h
         day06/puzzle.h day06/puzzle.cpp

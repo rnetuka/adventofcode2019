@@ -141,90 +141,20 @@
  * What is the diagnostic code for system ID 5?
  */
 
-#include <functional>
-#include <map>
-#include <sstream>
-#include <string>
-#include <vector>
-
-#include "../utils.h"
-#include "input.h"
-#include "instruction.h"
-#include "operation.h"
-#include "output.h"
-#include "parameter.h"
+#include "../intcode/computer.h"
 
 using namespace std;
-
+using namespace intcd;
 
 namespace day5 {
 
-    using intcode = vector<int>;
-
-    int extract_value(intcode code, parameter parameter) {
-        return parameter.mode == immediate ? parameter.value : code[parameter.value];
-    }
-
-    void run_code(intcode code, input input)
-    {
-        for (int i = 0; i < code.size(); )
-        {
-            auto operation = parse_operation(code, i);
-            int opcode = operation.code;
-            auto& parameters = operation.parameters;
-
-            if (opcode == fin)
-                return;
-
-            if (opcode == add || opcode == mul)
-            {
-                int a = extract_value(code, parameters[0]);
-                int b = extract_value(code, parameters[1]);
-                int addr = parameters[2];
-                code[addr] = calculations[opcode](a, b);
-                i += 4;
-            }
-
-            if (opcode == in)
-            {
-                int addr = parameters[0];
-                input >> code[addr];
-                i += 2;
-            }
-
-            if (opcode == out)
-            {
-                int value = extract_value(code, parameters[0]);
-                output << value;
-                i += 2;
-            }
-
-            if (opcode == jmp_if || opcode == jmp_ifn)
-            {
-                int cond = extract_value(code, parameters[0]);
-                int j    = extract_value(code, parameters[1]);
-                if (checks[opcode](cond))
-                    i = j;
-                else
-                    i += 3;
-            }
-
-            if (opcode == less || opcode == eq)
-            {
-                int a = extract_value(code, parameters[0]);
-                int b = extract_value(code, parameters[1]);
-                int addr = parameters[2];
-                code[addr] = comparisons[opcode](a, b);
-                i += 4;
-            }
-        }
-    }
-
     int run_code(input input)
     {
-        intcode code = read_csv_input<int>("day05/res/input.txt");
-        run_code(code, move(input));
-        return output.back();
+        intcode code = read("day05/res/input.txt");
+        output output;
+        intcode_machine machine { input, output };
+        machine.run_code(code);
+        return output.values().back();
     }
 
 }

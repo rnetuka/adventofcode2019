@@ -115,26 +115,14 @@
 #include <vector>
 
 #include "../utils.h"
+#include "../intcode/computer.h"
 
 using namespace std;
-
+using namespace intcd;
 
 namespace day2 {
 
-    using intcode = vector<int>;
     using operation = function<int(int, int)>;
-
-    enum opcode
-    {
-        add = 1,
-        mul = 2,
-        fin = 99
-    };
-
-    map<int, operation> operations {
-        { add, [](int a, int b) { return a + b; } },
-        { mul, [](int a, int b) { return a * b; } }
-    };
 
 
     int run_code(intcode code, int noun, int verb)
@@ -142,32 +130,14 @@ namespace day2 {
         code[1] = noun;
         code[2] = verb;
 
-        for (int i = 0; i < code.size(); )
-        {
-            int opcode = code[i];
-
-            if (opcode == fin)
-                break;
-
-            if (opcode == add || opcode == mul)
-            {
-                int a_i = code[i + 1];
-                int b_i = code[i + 2];
-                int res_i = code[i + 3];
-                auto operation = operations[opcode];
-                int a = code[a_i];
-                int b = code[b_i];
-                code[res_i] = operation(a, b);
-                i += 4;
-            }
-            else throw logic_error("Unknown opcode: " + to_string(opcode));
-        }
-        return code[0];
+        intcode_machine machine;
+        machine.run_code(code);
+        return machine.get_code()[0];
     }
 
     int run_code()
     {
-        intcode code = read_csv_input<int>("day02/res/input.txt");
+        intcode code = read("day02/res/input.txt");
         int noun = 12;
         int verb = 2;
         return run_code(code, noun, verb);
@@ -175,7 +145,7 @@ namespace day2 {
 
     int decode()
     {
-        intcode code = read_csv_input<int>("day02/res/input.txt");
+        intcode code = read("day02/res/input.txt");
 
         int expected_result = 19690720;
 

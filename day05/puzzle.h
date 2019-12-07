@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "input.h"
+#include "../intcode/input.h"
 
 namespace day5 {
 
-    int run_code(input input);
+    int run_code(intcd::input input);
 
 }

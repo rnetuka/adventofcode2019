@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace day7 {
+namespace intcd {
 
     enum parameter_mode
     {

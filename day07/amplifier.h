@@ -8,7 +8,7 @@
 
 namespace day7 {
 
-    class amplifier_io : public input, public output
+    class amplifier_io
     {
     private:
         std::deque<int> values_;
@@ -19,46 +19,22 @@ namespace day7 {
 
         }
 
-        void operator<<(int i) override {
+        void operator<<(int i) {
             values_.push_back(i);
         }
 
-        void operator>>(int& ref) override {
+        void operator>>(int& ref) {
             if (values_.empty())
-                throw no_input_exception();
+                throw intcd::no_input_exception();
             ref = values_.front();
             values_.pop_front();
         }
 
-        std::vector<int> values() const override {
+        std::vector<int> values() const {
             return { values_.front(), values_.back() };
         }
     };
 
-    class amplifier {
-    private:
-        intcode_machine machine;
-
-    public:
-        amplifier(amplifier_io& input, amplifier_io& output) : machine { input, output } {
-
-        }
-
-        bool finished() const {
-            return machine.finished();
-        }
-
-        void run_code(const intcode& code) {
-            machine.run_code(code);
-        }
-
-        void set_code(const intcode& code) {
-            machine.set_code(code);
-        }
-
-        void run() {
-            machine.run();
-        }
-    };
+    using amplifier = intcd::intcode_machine_t<amplifier_io, amplifier_io>;
 
 }

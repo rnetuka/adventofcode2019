@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+#include "intcode/input.h"
 #include "day01/puzzle.h"
 #include "day02/puzzle.h"
 #include "day03/puzzle.h"
@@ -13,7 +14,7 @@
 #include "day07/puzzle.h"
 
 using namespace std;
-using day5::input;
+using intcd::input;
 
 int main()
 {

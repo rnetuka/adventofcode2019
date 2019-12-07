@@ -119,7 +119,7 @@
 #include "amplifier.h"
 
 using namespace std;
-
+using namespace intcd;
 
 namespace day7 {
 
@@ -160,8 +160,9 @@ namespace day7 {
 
             vector<amplifier*> amplifiers = { &a, &b, &c, &d, &e };
 
-            for (auto amp : amplifiers)
+            for (auto amp : amplifiers) {
                 amp->set_code(code);
+            }
 
             while (! e.finished()) {
                 for (auto amp : amplifiers) {
