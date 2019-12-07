@@ -10,13 +10,14 @@
 #include "day04/puzzle.h"
 #include "day05/puzzle.h"
 #include "day06/puzzle.h"
+#include "day07/puzzle.h"
 
 using namespace std;
 using day5::input;
 
 int main()
 {
-    /*cout << "Day 1 1st result: " << day1::calculate_fuel() << "\n";
+    cout << "Day 1 1st result: " << day1::calculate_fuel() << "\n";
     cout << "Day 1 2nd result: " << day1::recalculate_fuel() << "\n";
     cout << "Day 2 1st result: " << day2::run_code() << "\n";
     cout << "Day 2 2nd result: " << day2::decode() << "\n";
@@ -25,7 +26,9 @@ int main()
     cout << "Day 4 1st result: " << day4::password_combinations1() << "\n";
     cout << "Day 4 2nd result: " << day4::password_combinations2() << "\n";
     cout << "Day 5 1st result: " << day5::run_code(input { 1 }) << "\n";
-    cout << "Day 5 1st result: " << day5::run_code(input { 5 }) << "\n";*/
+    cout << "Day 5 1st result: " << day5::run_code(input { 5 }) << "\n";
     cout << "Day 6 1st result: " << day6::orbit_count_checksum() << "\n";
     cout << "Day 6 2nd result: " << day6::steps_required() << "\n";
+    cout << "Day 7 1st result: " << day7::max_thurster_signal(0, 4) << "\n";
+    cout << "Day 7 2nd result: " << day7::max_thurster_signal(5, 9) << "\n";
 }
