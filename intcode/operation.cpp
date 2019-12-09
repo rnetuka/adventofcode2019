@@ -20,7 +20,7 @@ namespace intcd {
 
     }
 
-    operation parse_operation(const vector<value_t>& code, int i)
+    operation parse_operation(const intcode& code, int i)
     {
         instruction instruction { (int) code[i] };
 

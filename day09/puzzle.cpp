@@ -79,9 +79,9 @@ namespace day9 {
         output output;
         intcode_machine computer { input, output };
         computer.run_code(code);
-        if (output.values().size() != 1)
+        if (output.values.size() != 1)
             throw logic_error("Output contains error messages");
-        return output.values().back();
+        return output.values.back();
     }
 
     value_t get_boost_keycode() {

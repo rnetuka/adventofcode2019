@@ -154,7 +154,7 @@ namespace day5 {
         output output;
         intcode_machine machine { input, output };
         machine.run_code(code);
-        return output.values().back();
+        return output.values.back();
     }
 
 }

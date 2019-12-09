@@ -24,14 +24,9 @@ namespace intcd {
         return stoi(value.substr(value.length() - opcode_length));
     }
 
-    int instruction::operator[](int i) const {
-        if (i < 0)
-            return value[i] - '0';
-        return value[i] - '0';
-    }
-
     int instruction::param_mode(int i) const {
-        return (*this)[value.length() - opcode_length - 1 - i];
+        int j = value.length() - opcode_length - 1 - i;
+        return value[j] - '0';
     }
 
 }

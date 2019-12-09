@@ -17,14 +17,6 @@ namespace intcd {
     {
         const long value;
         const int mode;
-
-        parameter(long value, int mode) : value { value }, mode { mode } {
-
-        }
-
-        operator int() const {
-            return value;
-        }
     };
 
 }

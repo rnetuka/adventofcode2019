@@ -15,7 +15,7 @@ namespace intcd {
 
 
     template <>
-    intcode_machine_t<input, output>::intcode_machine_t() : input_ { &null_input }, output_ { &null_output } {
+    intcode_machine_t<input, output>::intcode_machine_t() : input_ { &null_input }, output_ { &std_output } {
 
     };
 

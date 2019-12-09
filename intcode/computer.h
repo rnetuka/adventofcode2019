@@ -16,8 +16,6 @@
 
 namespace intcd {
 
-    using intcode = std::vector<value_t>;
-
     intcode read(const std::string& path);
 
 
@@ -47,12 +45,9 @@ namespace intcd {
 
         value_t extract_value(parameter parameter) {
             switch (parameter.mode) {
-                case immediate:
-                    return parameter.value;
-                case position:
-                    return read(parameter.value);
-                case relative:
-                    return read(parameter.value + relative_base);
+                case immediate: return parameter.value;
+                case position:  return read(parameter.value);
+                case relative:  return read(parameter.value + relative_base);
             }
         }
 

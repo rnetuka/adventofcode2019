@@ -6,3 +6,5 @@
 
 using value_t = long long;
 using addr_t = int;
+
+using intcode = std::vector<value_t>;

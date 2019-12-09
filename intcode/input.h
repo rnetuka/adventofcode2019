@@ -19,18 +19,19 @@ namespace intcd {
     };
 
 
-    class input {
-    private:
+    struct input
+    {
         std::deque<int> values;
 
-    public:
         input(std::initializer_list<int> init_list) : values { init_list } {
 
         }
 
-        void operator>>(int& ref) {
+        void operator>>(int& ref)
+        {
             if (values.empty())
                 throw no_input_exception();
+
             ref = values.front();
             values.pop_front();
         }

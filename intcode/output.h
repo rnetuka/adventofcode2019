@@ -10,20 +10,15 @@
 
 namespace intcd {
 
-    class output {
-    private:
-        std::vector<value_t> values_;
+    struct output
+    {
+        std::vector<value_t> values;
 
-    public:
         void operator<<(value_t value) {
-            values_.push_back(value);
-        }
-
-        std::vector<value_t> values() const {
-            return std::vector<value_t> { values_ };
+            values.push_back(value);
         }
     };
 
-    inline output null_output;
+    inline output std_output;
 
 }
