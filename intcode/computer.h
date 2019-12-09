@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -93,7 +94,7 @@ namespace intcd {
                     return;
                 }
 
-                if (opcode == add || opcode == mul)
+                else if (opcode == add || opcode == mul)
                 {
                     auto a = extract_value(parameters[0]);
                     auto b = extract_value(parameters[1]);
@@ -103,7 +104,7 @@ namespace intcd {
                     i += 4;
                 }
 
-                if (opcode == in)
+                else if (opcode == in)
                 {
                     auto addr = extract_addr(parameters[0]);
                     int value = 0;
@@ -112,14 +113,14 @@ namespace intcd {
                     i += 2;
                 }
 
-                if (opcode == out)
+                else if (opcode == out)
                 {
                     auto value = extract_value(parameters[0]);
                     *output_ << value;
                     i += 2;
                 }
 
-                if (opcode == jmp_if || opcode == jmp_ifn)
+                else if (opcode == jmp_if || opcode == jmp_ifn)
                 {
                     auto cond = extract_value(parameters[0]);
                     auto j    = extract_value(parameters[1]);
@@ -129,7 +130,7 @@ namespace intcd {
                         i += 3;
                 }
 
-                if (opcode == less || opcode == eq)
+                else if (opcode == less || opcode == eq)
                 {
                     auto a = extract_value(parameters[0]);
                     auto b = extract_value(parameters[1]);
@@ -139,12 +140,14 @@ namespace intcd {
                     i += 4;
                 }
 
-                if (opcode == rel)
+                else if (opcode == rel)
                 {
                     auto value = extract_value(parameters[0]);
                     relative_base += value;
                     i += 2;
                 }
+
+                else throw std::logic_error("Unknown opcode: " + std::to_string(opcode));
             }
         }
 
