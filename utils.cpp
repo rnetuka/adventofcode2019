@@ -73,3 +73,18 @@ vector<int> read_csv_input(const string& path)
     stream.close();
     return result;
 }
+
+template <>
+vector<long long> read_csv_input(const string& path)
+{
+    ifstream stream { path };
+
+    vector<long long> result;
+
+    string token;
+    while (getline(stream, token, ','))
+        result.push_back(stol(token));
+
+    stream.close();
+    return result;
+}

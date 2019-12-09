@@ -9,15 +9,16 @@ namespace intcd {
     enum parameter_mode
     {
         position  = 0,
-        immediate = 1
+        immediate = 1,
+        relative  = 2
     };
 
     struct parameter
     {
-        const int value;
+        const long value;
         const int mode;
 
-        parameter(int value, int mode) : value { value }, mode { mode } {
+        parameter(long value, int mode) : value { value }, mode { mode } {
 
         }
 

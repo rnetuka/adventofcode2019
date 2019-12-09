@@ -20,9 +20,9 @@ namespace intcd {
 
     }
 
-    operation parse_operation(const vector<int>& code, int i)
+    operation parse_operation(const vector<value_t>& code, int i)
     {
-        instruction instruction { code[i] };
+        instruction instruction { (int) code[i] };
 
         int opcode = instruction.opcode();
 
@@ -39,7 +39,7 @@ namespace intcd {
 
         if (opcode == in)
         {
-            parameter res { code[i + 1], position };
+            parameter res { code[i + 1], instruction.param_mode(0) };
             return { opcode, { res } };
         }
 
@@ -62,6 +62,12 @@ namespace intcd {
             parameter b   { code[i + 2], instruction.param_mode(1) };
             parameter res { code[i + 3], instruction.param_mode(2) };
             return { opcode, { a, b, res} };
+        }
+
+        if (opcode == rel)
+        {
+            parameter val { code[i + 1], instruction.param_mode(0) };
+            return { opcode, { val } };
         }
 
         else throw logic_error("Unknown opcode: " + to_string(opcode));

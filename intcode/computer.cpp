@@ -10,11 +10,7 @@ using namespace std;
 namespace intcd {
 
     intcode read(const string& path) {
-        return read_csv_input<int>(path);
-    }
-
-    int extract_value(intcode code, parameter parameter) {
-        return parameter.mode == immediate ? parameter.value : code[parameter.value];
+        return read_csv_input<value_t>(path);
     }
 
 

@@ -11,7 +11,8 @@ namespace intcd {
     string padded_instruction_str(int value)
     {
         string result = to_string(value);
-        result.insert(result.begin(), instruction_length - result.length(), '0');
+        int n = instruction_length - result.length();
+        result.insert(result.begin(), n, '0');
         return result;
     }
 

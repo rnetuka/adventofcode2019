@@ -9,16 +9,16 @@
 
 #include "input.h"
 #include "instruction.h"
+#include "memory.h"
 #include "operation.h"
 #include "output.h"
 #include "parameter.h"
 
 namespace intcd {
 
-    using intcode = std::vector<int>;
+    using intcode = std::vector<value_t>;
 
     intcode read(const std::string& path);
-    int extract_value(intcode code, parameter parameter);
 
 
     template <typename In, typename Out>
@@ -27,9 +27,41 @@ namespace intcd {
     private:
         intcode code;
         int i = 0;
+        addr_t relative_base = 0;
         In*  input_ = nullptr;
         Out* output_ = nullptr;
         bool finished_ = false;
+
+
+        value_t read(addr_t addr) const {
+            if (addr >= code.size())
+                return 0;
+            return code[addr];
+        }
+
+        void write(addr_t addr, value_t value) {
+            if (addr >= code.size())
+                code.resize(addr + 1);
+            code[addr] = value;
+        }
+
+        value_t extract_value(parameter parameter) {
+            switch (parameter.mode) {
+                case immediate:
+                    return parameter.value;
+                case position:
+                    return read(parameter.value);
+                case relative:
+                    return read(parameter.value + relative_base);
+            }
+        }
+
+        addr_t extract_addr(parameter parameter) {
+            auto addr = parameter.value;
+            if (parameter.mode == relative)
+                addr += relative_base;
+            return addr;
+        }
 
     public:
         intcode_machine_t() : input_ { nullptr }, output_ { nullptr } {
@@ -68,31 +100,34 @@ namespace intcd {
 
                 if (opcode == add || opcode == mul)
                 {
-                    int a = extract_value(code, parameters[0]);
-                    int b = extract_value(code, parameters[1]);
-                    int addr = parameters[2];
-                    code[addr] = calculations[opcode](a, b);
+                    auto a = extract_value(parameters[0]);
+                    auto b = extract_value(parameters[1]);
+                    auto addr = extract_addr(parameters[2]);
+                    auto res = calculations[opcode](a, b);
+                    write(addr, res);
                     i += 4;
                 }
 
                 if (opcode == in)
                 {
-                    int addr = parameters[0];
-                    *input_ >> code[addr];
+                    auto addr = extract_addr(parameters[0]);
+                    int value = 0;
+                    *input_ >> value;
+                    write(addr, value);
                     i += 2;
                 }
 
                 if (opcode == out)
                 {
-                    int value = extract_value(code, parameters[0]);
+                    auto value = extract_value(parameters[0]);
                     *output_ << value;
                     i += 2;
                 }
 
                 if (opcode == jmp_if || opcode == jmp_ifn)
                 {
-                    int cond = extract_value(code, parameters[0]);
-                    int j    = extract_value(code, parameters[1]);
+                    auto cond = extract_value(parameters[0]);
+                    auto j    = extract_value(parameters[1]);
                     if (checks[opcode](cond))
                         i = j;
                     else
@@ -101,11 +136,19 @@ namespace intcd {
 
                 if (opcode == less || opcode == eq)
                 {
-                    int a = extract_value(code, parameters[0]);
-                    int b = extract_value(code, parameters[1]);
-                    int addr = parameters[2];
-                    code[addr] = comparisons[opcode](a, b);
+                    auto a = extract_value(parameters[0]);
+                    auto b = extract_value(parameters[1]);
+                    auto addr = extract_addr(parameters[2]);
+                    bool res = comparisons[opcode](a, b);
+                    write(addr, res);
                     i += 4;
+                }
+
+                if (opcode == rel)
+                {
+                    auto value = extract_value(parameters[0]);
+                    relative_base += value;
+                    i += 2;
                 }
             }
         }

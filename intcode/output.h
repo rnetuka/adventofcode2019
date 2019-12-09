@@ -6,19 +6,21 @@
 
 #include <vector>
 
+#include "memory.h"
+
 namespace intcd {
 
     class output {
     private:
-        std::vector<int> values_;
+        std::vector<value_t> values_;
 
     public:
-        void operator<<(int value) {
+        void operator<<(value_t value) {
             values_.push_back(value);
         }
 
-        std::vector<int> values() const {
-            return std::vector<int> { values_ };
+        std::vector<value_t> values() const {
+            return std::vector<value_t> { values_ };
         }
     };
 

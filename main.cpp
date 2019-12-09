@@ -13,6 +13,7 @@
 #include "day06/puzzle.h"
 #include "day07/puzzle.h"
 #include "day08/puzzle.h"
+#include "day09/puzzle.h"
 
 using namespace std;
 using intcd::input;
@@ -35,4 +36,6 @@ int main()
     cout << "Day 7 2nd result: " << day7::max_thurster_signal(5, 9) << "\n";
     cout << "Day 8 1st result: " << day8::fewest_zero_digit_layer() << "\n";
     cout << "Day 8 2nd result:\n" << day8::decode_message() << "\n";
+    cout << "Day 9 1st result: " << day9::get_boost_keycode() << "\n";
+    cout << "Day 9 2nd result: " << day9::distress_signal_coordinates() << "\n";
 }

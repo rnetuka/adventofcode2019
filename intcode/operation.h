@@ -8,13 +8,14 @@
 #include <map>
 #include <vector>
 
+#include "memory.h"
 #include "parameter.h"
 
 namespace intcd {
 
-    using calculation = std::function<int(int, int)>;
-    using check = std::function<bool(int)>;
-    using comparison = std::function<bool(int, int)>;
+    using calculation = std::function<value_t(value_t, value_t)>;
+    using check = std::function<bool(value_t)>;
+    using comparison = std::function<bool(value_t, value_t)>;
 
     enum opcode
     {
@@ -26,22 +27,23 @@ namespace intcd {
         jmp_ifn = 6,
         less    = 7,
         eq      = 8,
+        rel     = 9,
         fin     = 99
     };
 
     inline std::map<int, calculation> calculations {
-        { add, [](int a, int b) { return a + b; } },
-        { mul, [](int a, int b) { return a * b; } }
+        { add, [](value_t a, value_t b) { return a + b; } },
+        { mul, [](value_t a, value_t b) { return a * b; } }
     };
 
     inline std::map<int, check> checks {
-        {jmp_if,  [](int cond) { return  cond; } },
-        {jmp_ifn, [](int cond) { return !cond; } }
+        {jmp_if,  [](value_t cond) { return  cond; } },
+        {jmp_ifn, [](value_t cond) { return !cond; } }
     };
 
     inline std::map<int, comparison> comparisons {
-        { less, [](int a, int b) { return a < b; } },
-        { eq,   [](int a, int b) { return a == b; } }
+        { less, [](value_t a, value_t b) { return a < b; } },
+        { eq,   [](value_t a, value_t b) { return a == b; } }
     };
 
     struct operation
@@ -53,6 +55,6 @@ namespace intcd {
         operation(int code, std::vector<parameter>&& parameters);
     };
 
-    operation parse_operation(const std::vector<int>& code, int i);
+    operation parse_operation(const std::vector<value_t>& code, int i);
 
 }
