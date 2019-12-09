@@ -1,7 +1,8 @@
-//
+ //
 // Created by rnetuka on 07.12.19.
 //
 
+#include <map>
 #include <stdexcept>
 #include <string>
 
@@ -20,57 +21,31 @@ namespace intcd {
 
     }
 
+    std::map<int, int> operands {
+        { fin,     0 },
+        { add,     3 },
+        { mul,     3 },
+        { in,      1 },
+        { out,     1 },
+        { jmp_if,  2 },
+        { jmp_ifn, 2 },
+        { less,    3 },
+        { eq,      3 },
+        { rel,     1 }
+    };
+
     operation parse_operation(const intcode& code, int i)
     {
         instruction instruction { (int) code[i] };
 
         int opcode = instruction.opcode();
+        int n = operands[opcode];
 
-        if (opcode == fin)
-            return { opcode };
+        vector<parameter> parameters;
+        for (int j = 0; j < n; j++)
+            parameters.push_back({ code[i + j + 1], instruction.param_mode(j) });
 
-        if (opcode == add || opcode == mul)
-        {
-            parameter a   { code[i + 1], instruction.param_mode(0) };
-            parameter b   { code[i + 2], instruction.param_mode(1) };
-            parameter res { code[i + 3], instruction.param_mode(2) };
-            return { opcode, { a, b, res} };
-        }
-
-        if (opcode == in)
-        {
-            parameter res { code[i + 1], instruction.param_mode(0) };
-            return { opcode, { res } };
-        }
-
-        if (opcode == out)
-        {
-            parameter val { code[i + 1], instruction.param_mode(0) };
-            return { opcode, { val } };
-        }
-
-        if (opcode == jmp_if || opcode == jmp_ifn)
-        {
-            parameter check  { code[i + 1], instruction.param_mode(0) };
-            parameter target { code[i + 2], instruction.param_mode(1) };
-            return { opcode, { check, target } };
-        }
-
-        if (opcode == less || opcode == eq)
-        {
-            parameter a   { code[i + 1], instruction.param_mode(0) };
-            parameter b   { code[i + 2], instruction.param_mode(1) };
-            parameter res { code[i + 3], instruction.param_mode(2) };
-            return { opcode, { a, b, res} };
-        }
-
-        if (opcode == rel)
-        {
-            parameter val { code[i + 1], instruction.param_mode(0) };
-            return { opcode, { val } };
-        }
-
-        else throw logic_error("Unknown opcode: " + to_string(opcode));
+        return { opcode, move(parameters) };
     }
 
 }
