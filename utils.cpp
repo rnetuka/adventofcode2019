@@ -88,3 +88,18 @@ vector<long long> read_csv_input(const string& path)
     stream.close();
     return result;
 }
+
+string read_file(const string& path)
+{
+    ifstream stream { path };
+    string result;
+
+    while (stream)
+    {
+        string line;
+        stream >> line;
+        result += line;
+        result += "\n";
+    }
+    return result;
+}
