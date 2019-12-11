@@ -2,10 +2,10 @@
 // Created by rnetuka on 11.12.19.
 //
 
-using namespace std;
-
 #include "robot.h"
 #include "spaceship.h"
+
+using namespace std;
 
 namespace day11 {
 
