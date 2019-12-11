@@ -90,7 +90,8 @@
  * once?
  *
  * --- Part Two ---
- * You're not sure what it's trying to paint, but it's definitely not a registration identifier. The Space Police are getting impatient.
+ * You're not sure what it's trying to paint, but it's definitely not a registration identifier. The Space Police are
+ * getting impatient.
  *
  * Checking your external ship cameras again, you notice a white panel marked "emergency hull painting robot starting
  * panel". The rest of the panels are still black, but it looks like the robot was expecting to start on a white panel,
