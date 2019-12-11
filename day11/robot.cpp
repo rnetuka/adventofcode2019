@@ -31,12 +31,6 @@ namespace day11 {
         }
     }
 
-    void deploy(robot_t& robot, int x, int y) {
-        ship.robot = &robot;
-        ship.robot_x = x;
-        ship.robot_y = y;
-    }
-
     void turn_left(robot_t& robot) {
         switch (robot.direction) {
             case up:    robot.direction = left;  break;

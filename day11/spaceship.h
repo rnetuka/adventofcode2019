@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include "robot.h"
-
 namespace day11 {
 
     constexpr static int spaceship_area_width  = 1000;
@@ -14,7 +12,6 @@ namespace day11 {
     struct spaceship_t {
         int area[spaceship_area_width][spaceship_area_height];
 
-        robot_t* robot = nullptr;
         int robot_x = 0;
         int robot_y = 0;
 
@@ -23,6 +20,7 @@ namespace day11 {
 
     inline spaceship_t ship;
 
+    void deploy_robot(int x, int y);
     void repaint_black(spaceship_t& spaceship);
     std::string registration_id(const spaceship_t& spaceship);
 

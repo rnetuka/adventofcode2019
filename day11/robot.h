@@ -33,7 +33,6 @@ namespace day11 {
 
     inline scanner_t scanner;
 
-    void deploy(robot_t& robot, int x, int y);
     void turn_left(robot_t& robot);
     void turn_right(robot_t& robot);
     void move_forward(robot_t& robot);

@@ -134,7 +134,7 @@ namespace day11 {
         robor_cpu cpu { scanner, output };
 
         robot_t robot;
-        deploy(robot, init_x, init_y);
+        deploy_robot(init_x, init_y);
 
         vector<coords> painted_coords;
 
@@ -163,7 +163,7 @@ namespace day11 {
         robor_cpu cpu { scanner, output };
 
         robot_t robot;
-        deploy(robot, init_x, init_y);
+        deploy_robot(init_x, init_y);
         ship.area[init_x][init_y] = white;
 
         output.listeners.emplace_back([&robot](int color, int turn) { handle_robot(robot, color, turn); });

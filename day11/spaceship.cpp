@@ -2,10 +2,13 @@
 // Created by rnetuka on 11.12.19.
 //
 
+#include <map>
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <vector>
 
+#include "robot.h"
 #include "spaceship.h"
 
 using namespace std;
@@ -14,8 +17,18 @@ namespace day11 {
 
     const string whitespace_chars = "\t\n\v\f\r ";
 
+    map<int, char> ascii_colors {
+        { black, ' ' },     // use negative colors for better view
+        { white, '#' }
+    };
+
     spaceship_t::spaceship_t() {
         repaint_black(*this);
+    }
+
+    void deploy_robot(int x, int y) {
+        ship.robot_x = x;
+        ship.robot_y = y;
     }
 
     void repaint_black(spaceship_t& spaceship) {
@@ -25,15 +38,13 @@ namespace day11 {
     }
 
     vector<string> area_lines(const spaceship_t& spaceship) {
-        stringstream stream;
         vector<string> lines;
+        stringstream stream;
+
         for (int y = 0; y < spaceship_area_height; y++) {
             for (int x = 0; x < spaceship_area_width; x++) {
                 int color = ship.area[x][y];
-                if (color == black)
-                    stream << ' ';
-                else
-                    stream << '#';
+                stream << ascii_colors[color];
             }
             lines.push_back(stream.str());
             stream.str("");
