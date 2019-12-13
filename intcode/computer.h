@@ -31,6 +31,9 @@ namespace intcd {
         Out* output_ = nullptr;
         bool finished_ = false;
 
+        std::vector<std::function<void()>> input_listeners;
+        std::vector<std::function<void(value_t)>> output_listeners;
+
 
         value_t read(addr_t addr) const {
             if (addr >= code.size())
@@ -106,6 +109,9 @@ namespace intcd {
 
                 else if (opcode == in)
                 {
+                    for (auto& listener : input_listeners)
+                        listener();
+
                     auto addr = extract_addr(parameters[0]);
                     int value = 0;
                     *input_ >> value;
@@ -117,6 +123,10 @@ namespace intcd {
                 {
                     auto value = extract_value(parameters[0]);
                     *output_ << value;
+
+                    for (auto& listener : output_listeners)
+                        listener(value);
+
                     i += 2;
                 }
 
@@ -149,6 +159,14 @@ namespace intcd {
 
                 else throw std::logic_error("Unknown opcode: " + std::to_string(opcode));
             }
+        }
+
+        void add_input_listener(std::function<void()> listener) {
+            input_listeners.push_back(listener);
+        }
+
+        void add_output_listener(std::function<void(value_t)> listener) {
+            output_listeners.push_back(listener);
         }
 
         const intcode& get_code() const {

@@ -31,4 +31,8 @@ add_executable(adventofcode2019
         day10/puzzle.h day10/puzzle.cpp
         day11/spaceship.h day11/spaceship.cpp
         day11/robot.h day11/robot.cpp
-        day11/puzzle.h day11/puzzle.cpp)
+        day11/puzzle.h day11/puzzle.cpp
+        day12/puzzle.h day12/puzzle.cpp
+        day13/game.h day13/game.cpp
+        day13/joystick.h
+        day13/puzzle.h day13/puzzle.cpp)

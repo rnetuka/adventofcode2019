@@ -16,6 +16,8 @@
 #include "day09/puzzle.h"
 #include "day10/puzzle.h"
 #include "day11/puzzle.h"
+#include "day12/puzzle.h"
+#include "day13/puzzle.h"
 
 using namespace std;
 using intcd::input;
@@ -44,4 +46,7 @@ int main()
     cout << "Day 10 2nd result: " << day10::destroyed_asteroid_number() << "\n";
     cout << "Day 11 1st result: " << day11::count_painted_panels() << "\n";
     cout << "Day 11 2nd result:\n" << day11::get_registration_identifier() << "\n";
+    cout << "Day 12 1st result: " << day12::system_total_energy() << "\n";
+    cout << "Day 13 1st result: " << day13::count_block_tiles() << "\n";
+    cout << "Day 13 2nd result: " << day13::beat_the_game() << "\n";
 }
