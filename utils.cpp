@@ -18,7 +18,7 @@ vector<string> read_lines(const string& path)
     while (stream)
     {
         string line;
-        stream >> line;
+        getline(stream, line);
         if (! line.empty())
             values.push_back(line);
     }

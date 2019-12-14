@@ -9,6 +9,7 @@
 #include <vector>
 
 #include <iostream>
+#include <numeric>
 
 using namespace std;
 
@@ -91,6 +92,70 @@ namespace day12 {
         int t4 = total_energy(moons[3]);
 
         return t1+t2+t3+t4;
+    }
+
+    long steps_to_repeat()
+    {
+        /*moon a { -8, -10, 0 };
+        moon b { 5, 5, 10 };
+        moon c { 2, -7, 3 };
+        moon d { 9, -8, -3 };*/
+
+        moon a { Io };
+        moon b { Europa };
+        moon c { Ganymede };
+        moon d { Callisto };
+
+        vector<moon> moons { a, b, c, d };
+        vector<moon*> moon_ps { &moons[0], &moons[1], &moons[2], &moons[3] };
+
+        long i = 0;
+        while (true) {
+            i++;
+            tick(moon_ps);
+            if (moons[0].x == a.x
+             && moons[1].x == b.x
+             && moons[2].x == c.x
+             && moons[3].x == d.x
+             && moons[0].vx == 0
+             && moons[1].vx == 0
+             && moons[2].vx == 0
+             && moons[3].vx == 0)
+                break;
+
+            if (moons[0].y == a.y
+             && moons[1].y == b.y
+             && moons[2].y == c.y
+             && moons[3].y == d.y
+             && moons[0].vy == 0
+             && moons[1].vy == 0
+             && moons[2].vy == 0
+             && moons[3].vy == 0)
+                ;//break;
+
+            if (moons[0].z == a.z
+             && moons[1].z == b.z
+             && moons[2].z == c.z
+             && moons[3].z == d.z
+             && moons[0].vz == 0
+             && moons[1].vz == 0
+             && moons[2].vz == 0
+             && moons[3].vz == 0)
+                ;//break;
+        }
+        //return i;
+        //x: 231614
+        //y: 96236
+        //z: 144624
+
+        long res = lcm((int64_t)231614, lcm((int64_t)96236, (int64_t)144624));
+        //return i;
+
+        // x: 2028
+        // y: 5898
+        // z: 4702
+        //long res = lcm(lcm((int64_t) 2028, (int64_t) 5898), (int64_t) 4702);
+        return res;
     }
 
 }

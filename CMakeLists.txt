@@ -35,4 +35,6 @@ add_executable(adventofcode2019
         day12/puzzle.h day12/puzzle.cpp
         day13/game.h day13/game.cpp
         day13/joystick.h
-        day13/puzzle.h day13/puzzle.cpp)
+        day13/puzzle.h day13/puzzle.cpp
+        day14/nanofactory.h day14/nanofactory.cpp
+        day14/puzzle.h day14/puzzle.cpp)
