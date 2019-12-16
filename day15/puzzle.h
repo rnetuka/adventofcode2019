@@ -2,7 +2,7 @@
 // Created by rnetuka on 16.12.19.
 //
 
-#ifndef ADVENTOFCODE2019_PUZZLE_H
-#define ADVENTOFCODE2019_PUZZLE_H
+#pragma once
 
-#endif //ADVENTOFCODE2019_PUZZLE_H
+int steps_to_oxygen_storage();
+int minutes_to_fill_with_oxygen();
