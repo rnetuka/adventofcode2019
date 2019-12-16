@@ -136,27 +136,4 @@ namespace nanofactory {
         }
     }
 
-    long calculate_required_ore2() {
-        long result = 0;
-        long init = 1'120'816 + 814'440;
-        long max_i = init;
-
-        for (long i = init; i < init + 100; i++) {
-            formula_t formula = formula_for("FUEL");
-
-            formula.result.count = i;
-            for (auto& requirement : formula.ingredients)
-                requirement = requirement * formula.result.count;
-
-            expand(formula);
-            long res = formula.ingredients[0].count;
-            if (res > result && res < 1'000'000'000'000) {
-                result = res;
-                max_i = i;
-            }
-        }
-
-        return max_i;
-    }
-
 }

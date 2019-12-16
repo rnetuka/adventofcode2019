@@ -1,0 +1,8 @@
+//
+// Created by rnetuka on 16.12.19.
+//
+
+#ifndef ADVENTOFCODE2019_TILES_H
+#define ADVENTOFCODE2019_TILES_H
+
+#endif //ADVENTOFCODE2019_TILES_H
