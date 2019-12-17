@@ -21,6 +21,7 @@
 #include "day14/puzzle.h"
 #include "day15/puzzle.h"
 #include "day16/puzzle.h"
+#include "day17/puzzle.h"
 
 using namespace std;
 using intcd::input;
@@ -58,4 +59,5 @@ int main()
     cout << "Day 15 1st result: " << steps_to_oxygen_storage() << "\n";
     cout << "Day 15 2nd result: " << minutes_to_fill_with_oxygen() << "\n";
     cout << "Day 16 1st result: " << first_eight_digits() << "\n";
+    cout << "Day 17 1st result: " << sum_alignment_parameters() << "\n";
 }
