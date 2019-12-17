@@ -53,8 +53,8 @@ int main()
     cout << "\n";
 
     cout << "--- Day 3: Crossed Wires ---\n";
-    display_answer(1, day3::closest_intersection_distance(), 280);
-    display_answer(2, day3::min_steps_to_reach_intersection(), 10554);
+    display_answer(1, closest_intersection_distance(), 280);
+    display_answer(2, min_steps_to_reach_intersection(), 10554);
     cout << "\n";
 
     cout << "--- Day 4: Secure Container ---\n";

@@ -95,67 +95,68 @@
 #include <set>
 #include <vector>
 
+#include "../map/coords.h"
 #include "wire.h"
 
 using namespace std;
 
 
-namespace day3 {
-
-    const vector<coords>& wireA = read_wire("day03/res/wire1.txt");
-    const vector<coords>& wireB = read_wire("day03/res/wire2.txt");
+const vector<coords>& wireA = read_wire("day03/res/wire1.txt");
+const vector<coords>& wireB = read_wire("day03/res/wire2.txt");
 
 
-    vector<coords> intersection_points()
-    {
-        vector<coords> intersection(wireA.size());
+vector<coords> intersection_points()
+{
+    vector<coords> intersection(wireA.size());
 
-        set<coords> wireA_points { wireA.begin() + 1, wireA.end() };
-        set<coords> wireB_points { wireB.begin() + 1, wireB.end() };
+    set<coords> wireA_points { wireA.begin() + 1, wireA.end() };
+    set<coords> wireB_points { wireB.begin() + 1, wireB.end() };
 
-        auto it = set_intersection(
-                wireA_points.begin(), wireA_points.end(),
-                wireB_points.begin(), wireB_points.end(),
-                intersection.begin());
+    auto it = set_intersection(
+            wireA_points.begin(), wireA_points.end(),
+            wireB_points.begin(), wireB_points.end(),
+            intersection.begin());
 
-        intersection.resize(it - intersection.begin());
-        return intersection;
-    }
+    intersection.resize(it - intersection.begin());
+    return intersection;
+}
 
-    int steps_to_reach_point(const vector<coords>& wire, const coords& point)
-    {
-        auto it = find(wire.begin(), wire.end(), point);
+int distance(const coords& a, const coords& b) {
+    return abs(a.x - b.x) + abs(a.y - b.y);
+}
 
-        if (it == wire.end())
-            throw invalid_argument("Wire doesn't reach specified point");
+int steps_to_reach_point(const vector<coords>& wire, const coords& point)
+{
+    auto it = find(wire.begin(), wire.end(), point);
 
-        return distance(wire.begin(), it);
-    }
+    if (it == wire.end())
+        throw logic_error("Wire doesn't reach specified point");
 
-    int steps_to_reach_intersection(const coords& intersection) {
-        return steps_to_reach_point(wireA, intersection) + steps_to_reach_point(wireB, intersection);
-    }
+    return distance(wire.begin(), it);
+}
 
-    int closest_intersection_distance()
-    {
-        auto points = intersection_points();
+int steps_to_reach_intersection(const coords& intersection) {
+    return steps_to_reach_point(wireA, intersection) + steps_to_reach_point(wireB, intersection);
+}
 
-        coords closest = *min_element(points.begin(), points.end(), [](const coords& a, const coords& b) {
-            return distance(a, central_point) < distance(b, central_point);
-        });
+int closest_intersection_distance()
+{
+    auto points = intersection_points();
 
-        return distance(closest, central_point);
-    }
+    coords closest = *min_element(points.begin(), points.end(), [](const coords& a, const coords& b) {
+        return distance(a, central_point) < distance(b, central_point);
+    });
 
-    int min_steps_to_reach_intersection()
-    {
-        auto points = intersection_points();
+    return distance(closest, central_point);
+}
 
-        coords nearest = *min_element(points.begin(), points.end(), [](const coords& a, const coords& b) {
-            return steps_to_reach_intersection(a) < steps_to_reach_intersection(b);
-        });
+int min_steps_to_reach_intersection()
+{
+    auto points = intersection_points();
 
-        return steps_to_reach_intersection(nearest);
-    }
+    coords closest = *min_element(points.begin(), points.end(), [](const coords& a, const coords& b) {
+        return steps_to_reach_intersection(a) < steps_to_reach_intersection(b);
+    });
 
+    return steps_to_reach_intersection(closest);
 }

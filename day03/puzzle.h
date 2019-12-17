@@ -4,9 +4,5 @@
 
 #pragma once
 
-namespace day3 {
-
-    int closest_intersection_distance();
-    int min_steps_to_reach_intersection();
-
-}
+int closest_intersection_distance();
+int min_steps_to_reach_intersection();
