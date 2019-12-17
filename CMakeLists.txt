@@ -40,4 +40,8 @@ add_executable(adventofcode2019
         day14/puzzle.h day14/puzzle.cpp
         day15/sectormap.h day15/sectormap.cpp
         day15/graph.h day15/graph.cpp
-        day15/puzzle.h day15/puzzle.cpp)
+        day15/puzzle.h day15/puzzle.cpp
+        day16/sequence.h day16/sequence.cpp
+        day16/phase.h day16/phase.cpp
+        day16/signal.h day16/signal.cpp
+        day16/puzzle.h day16/puzzle.cpp)
