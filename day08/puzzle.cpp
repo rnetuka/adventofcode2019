@@ -145,7 +145,7 @@ namespace day8 {
 
     ostream& operator<<(ostream& stream, const image& img) {
         for (int i = 0; i < layer_size; i++) {
-            char ascii = img.data[i] == black ? 'x' : ' ';
+            char ascii = img.data[i] == black ? '#' : ' ';
             stream << ascii;
             if ((i + 1) % image_width == 0)
                 stream << "\n";

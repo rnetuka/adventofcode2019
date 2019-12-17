@@ -4,9 +4,5 @@
 
 #pragma once
 
-namespace day1 {
-
-    int calculate_fuel();
-    int recalculate_fuel();
-
-}
+int calculate_fuel();
+int recalculate_fuel();

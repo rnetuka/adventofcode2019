@@ -24,40 +24,104 @@
 #include "day17/puzzle.h"
 
 using namespace std;
-using intcd::input;
+
+template <typename T>
+void display_answer(int n, const T& result, const T& expected)
+{
+    if (result != expected)
+        throw logic_error("Result is not equal to expected value");
+
+    cout << "Answer " << n << ": " << result << " OK\n";
+}
+
+template <typename T>
+void display_answer(int n, const T& result)
+{
+    cout << "Answer " << n << ": " << result << " (?)\n";
+}
 
 int main()
 {
-    cout << "Day 1 1st result: " << day1::calculate_fuel() << "\n";
-    cout << "Day 1 2nd result: " << day1::recalculate_fuel() << "\n";
-    cout << "Day 2 1st result: " << day2::run_code() << "\n";
-    cout << "Day 2 2nd result: " << day2::decode() << "\n";
-    cout << "Day 3 1st result: " << day3::closest_intersection_distance() << "\n";
-    cout << "Day 3 2nd result: " << day3::min_steps_to_reach_intersection() << "\n";
-    cout << "Day 4 1st result: " << day4::password_combinations1() << "\n";
-    cout << "Day 4 2nd result: " << day4::password_combinations2() << "\n";
-    cout << "Day 5 1st result: " << day5::run_code(input { 1 }) << "\n";
-    cout << "Day 5 1st result: " << day5::run_code(input { 5 }) << "\n";
-    cout << "Day 6 1st result: " << day6::orbit_count_checksum() << "\n";
-    cout << "Day 6 2nd result: " << day6::steps_required() << "\n";
-    cout << "Day 7 1st result: " << day7::max_thurster_signal(0, 4) << "\n";
-    cout << "Day 7 2nd result: " << day7::max_thurster_signal(5, 9) << "\n";
-    cout << "Day 8 1st result: " << day8::fewest_zero_digit_layer() << "\n";
-    cout << "Day 8 2nd result:\n" << day8::decode_message() << "\n";
-    cout << "Day 9 1st result: " << day9::get_boost_keycode() << "\n";
-    cout << "Day 9 2nd result: " << day9::distress_signal_coordinates() << "\n";
-    cout << "Day 10 1st result: " << day10::count_asteroids() << "\n";
-    cout << "Day 10 2nd result: " << day10::destroyed_asteroid_number() << "\n";
-    cout << "Day 11 1st result: " << day11::count_painted_panels() << "\n";
-    cout << "Day 11 2nd result:\n" << day11::get_registration_identifier() << "\n";
-    cout << "Day 12 1st result: " << day12::system_total_energy() << "\n";
-    cout << "Day 12 2nd result: " << day12::steps_to_repeat() << "\n";
-    cout << "Day 13 1st result: " << day13::count_block_tiles() << "\n";
-    cout << "Day 13 2nd result: " << day13::beat_the_game() << "\n";
-    cout << "Day 14 1st result: " << day14::calculate_required_ore() << "\n";
-    cout << "Day 14 2nd result: " << day14::calculate_produced_fuel() << "\n";
-    cout << "Day 15 1st result: " << steps_to_oxygen_storage() << "\n";
-    cout << "Day 15 2nd result: " << minutes_to_fill_with_oxygen() << "\n";
-    cout << "Day 16 1st result: " << first_eight_digits() << "\n";
-    cout << "Day 17 1st result: " << sum_alignment_parameters() << "\n";
+    cout << "--- Day 1: The Tyranny of the Rocket Equation ---\n";
+    display_answer(1, calculate_fuel(), 3087896);
+    display_answer(2, recalculate_fuel(), 4628989);
+    cout << "\n";
+
+    cout << "--- Day 2: 1202 Program Alarm ---\n";
+    display_answer(1, value_at_position_0(), 3931283);
+    display_answer(2, decode_output(), 6979);
+    cout << "\n";
+
+    cout << "--- Day 3: Crossed Wires ---\n";
+    display_answer(1, day3::closest_intersection_distance(), 280);
+    display_answer(2, day3::min_steps_to_reach_intersection(), 10554);
+    cout << "\n";
+
+    cout << "--- Day 4: Secure Container ---\n";
+    display_answer(1, day4::password_combinations1(), 1154);
+    display_answer(2, day4::password_combinations2(), 750);
+    cout << "\n";
+
+    cout << "--- Day 5: Sunny with a Chance of Asteroids ---\n";
+    display_answer(1, day5::run_code(intcd::input { 1 }), 12428642);
+    display_answer(2, day5::run_code(intcd::input { 5 }), 918655);
+    cout << "\n";
+
+    cout << "--- Day 6: Universal Orbit Map ---\n";
+    display_answer(1, day6::orbit_count_checksum(), 295834);
+    display_answer(2, day6::steps_required(), 361);
+    cout << "\n";
+
+    cout << "--- Day 7: Amplification Circuit ---\n";
+    display_answer(1, day7::max_thurster_signal(0, 4), 262086);
+    display_answer(2, day7::max_thurster_signal(5, 9), 5371621);
+    cout << "\n";
+
+    cout << "--- Day 8: Space Image Format ---\n";
+    display_answer(1, day8::fewest_zero_digit_layer(), 1703);
+    cout << "Answer 2:\n" << day8::decode_message() << "\n";    //HCGFE
+    cout << "\n";
+
+    cout << "--- Day 9: Sensor Boost ---\n";
+    display_answer(1, day9::get_boost_keycode(), 2457252183LL);
+    display_answer(2, day9::distress_signal_coordinates(), 70634LL);
+    cout << "\n";
+
+    cout << "--- Day 10: Monitoring Station ---\n";
+    display_answer(1, day10::count_asteroids(), 278);
+    display_answer(2, day10::destroyed_asteroid_number(), 1417);
+    cout << "\n";
+
+    cout << "--- Day 11: Space Police ---\n";
+    display_answer(1, day11::count_painted_panels(), 1686);
+    cout << "Answer 2:\n" << day11::get_registration_identifier() << "\n";
+    cout << "\n";
+
+    cout << "--- Day 12: The N-Body Problem ---\n";
+    display_answer(1, day12::system_total_energy(), 7077);
+    display_answer(2, day12::steps_to_repeat(), 402951477454512L);
+    cout << "\n";
+
+    cout << "--- Day 13: Care Package ---\n";
+    display_answer(1, day13::count_block_tiles(), 341);
+    display_answer(2, day13::beat_the_game(), 17138);
+    cout << "\n";
+
+    cout << "--- Day 14: Space Stoichiometry ---\n";
+    display_answer(1, day14::calculate_required_ore(), 892207);
+    display_answer(2, day14::calculate_produced_fuel(), 1935265L);
+    cout << "\n";
+
+    cout << "--- Day 15: Oxygen System ---\n";
+    display_answer(1, steps_to_oxygen_storage(), 224);
+    display_answer(2, minutes_to_fill_with_oxygen(), 284);
+    cout << "\n";
+
+    cout << "--- Day 16: Flawed Frequency Transmission ---\n";
+    display_answer(1, first_eight_digits(), 82525123);
+    cout << "\n";
+
+    cout << "--- Day 17: Set and Forget ---\n";
+    display_answer(1, sum_alignment_parameters(), 13580);
+    cout << "\n";
 }

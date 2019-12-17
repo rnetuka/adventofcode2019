@@ -108,53 +108,44 @@
  * (For example, if noun=12 and verb=2, the answer would be 1202.)
  */
 
-#include <fstream>
 #include <functional>
-#include <map>
-#include <string>
-#include <vector>
 
-#include "../utils.h"
 #include "../intcode/computer.h"
 
 using namespace std;
 using namespace intcd;
 
-namespace day2 {
-
-    using operation = function<int(int, int)>;
+using operation = function<int(int, int)>;
 
 
-    int run_code(intcode code, int noun, int verb)
-    {
-        code[1] = noun;
-        code[2] = verb;
+int run_code(intcode code, int noun, int verb)
+{
+    code[1] = noun;
+    code[2] = verb;
 
-        intcode_machine machine;
-        machine.run_code(code);
-        return machine.get_code()[0];
-    }
+    intcode_machine computer;
+    computer.run_code(code);
+    return computer.get_code()[0];
+}
 
-    int run_code()
-    {
-        intcode code = read("day02/res/input.txt");
-        int noun = 12;
-        int verb = 2;
-        return run_code(code, noun, verb);
-    }
+int value_at_position_0()
+{
+    intcode code = read("day02/res/input.txt");
+    int noun = 12;
+    int verb = 2;
+    return run_code(code, noun, verb);
+}
 
-    int decode()
-    {
-        intcode code = read("day02/res/input.txt");
+int decode_output()
+{
+    intcode code = read("day02/res/input.txt");
 
-        int expected_result = 19690720;
+    int expected_result = 19690720;
 
-        for (int noun = 0; noun < 99; noun++)
-            for (int verb = 0; verb < 99; verb++)
-                if (run_code(code, noun, verb) == expected_result)
-                    return 100 * noun + verb;
+    for (int noun = 0; noun < 99; noun++)
+        for (int verb = 0; verb < 99; verb++)
+            if (run_code(code, noun, verb) == expected_result)
+                return 100 * noun + verb;
 
-        return -1;
-    }
-
+    return -1;
 }

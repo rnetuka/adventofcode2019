@@ -59,33 +59,29 @@
 
 #include "../utils.h"
 
-using namespace std;
+const auto modules = read_lines<int>("day01/res/input.txt");
 
+int requirement(int n) {
+    return n / 3 - 2;
+}
 
-namespace day1 {
+int calculate_fuel() {
+    int fuel = 0;
+    for (int mass : modules)
+        fuel += requirement(mass);
+    return fuel;
+}
 
-    const auto modules = read_lines<int>("day01/res/input.txt");
+int recalculate_fuel(int mass) {
+    int fuel = 0;
+    for (int i = requirement(mass); i > 0; i = requirement(i))
+        fuel += i;
+    return fuel;
+}
 
-
-    int calculate_fuel() {
-        int fuel = 0;
-        for (int mass : modules)
-            fuel += mass / 3 - 2;
-        return fuel;
-    }
-
-    int recalculate_fuel(int mass) {
-        int fuel = 0;
-        for (int i = mass / 3 - 2; i > 0; i = i / 3 - 2)
-            fuel += i;
-        return fuel;
-    }
-
-    int recalculate_fuel() {
-        int fuel = 0;
-        for (int mass : modules)
-            fuel += recalculate_fuel(mass);
-        return fuel;
-    }
-
+int recalculate_fuel() {
+    int fuel = 0;
+    for (int mass : modules)
+        fuel += recalculate_fuel(mass);
+    return fuel;
 }

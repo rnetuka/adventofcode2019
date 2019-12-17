@@ -4,9 +4,5 @@
 
 #pragma once
 
-namespace day2 {
-
-    int run_code();
-    int decode();
-
-}
+int value_at_position_0();
+int decode_output();
