@@ -1,0 +1,8 @@
+//
+// Created by rnetuka on 20.12.19.
+//
+
+#ifndef ADVENTOFCODE2019_PUZZLE_H
+#define ADVENTOFCODE2019_PUZZLE_H
+
+#endif //ADVENTOFCODE2019_PUZZLE_H

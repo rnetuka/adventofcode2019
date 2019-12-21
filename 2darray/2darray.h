@@ -1,0 +1,8 @@
+//
+// Created by rnetuka on 18.12.19.
+//
+
+#ifndef ADVENTOFCODE2019_2DARRAY_H
+#define ADVENTOFCODE2019_2DARRAY_H
+
+#endif //ADVENTOFCODE2019_2DARRAY_H

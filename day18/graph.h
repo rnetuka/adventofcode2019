@@ -1,0 +1,8 @@
+//
+// Created by rnetuka on 19.12.19.
+//
+
+#ifndef ADVENTOFCODE2019_GRAPH_H
+#define ADVENTOFCODE2019_GRAPH_H
+
+#endif //ADVENTOFCODE2019_GRAPH_H
