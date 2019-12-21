@@ -2,7 +2,7 @@
 // Created by rnetuka on 19.12.19.
 //
 
-#ifndef ADVENTOFCODE2019_PUZZLE_H
-#define ADVENTOFCODE2019_PUZZLE_H
+#pragma once
 
-#endif //ADVENTOFCODE2019_PUZZLE_H
+int tractor_beam_points();
+int santas_ship_coords();

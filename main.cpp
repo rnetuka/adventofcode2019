@@ -22,6 +22,10 @@
 #include "day15/puzzle.h"
 #include "day16/puzzle.h"
 #include "day17/puzzle.h"
+#include "day18/puzzle.h"
+#include "day19/puzzle.h"
+#include "day20/puzzle.h"
+#include "day21/puzzle.h"
 
 using namespace std;
 
@@ -123,5 +127,24 @@ int main()
 
     cout << "--- Day 17: Set and Forget ---\n";
     display_answer(1, sum_alignment_parameters(), 13580);
+    display_answer(2, collected_space_dust(), 1063081);
+    cout << "\n";
+
+    cout << "--- Day 18: Many-Worlds Interpretation ---\n";
+    //display_answer(1, shortest_path_for_all_keys());
+    cout << "\n";
+
+    cout << "--- Day 19: Tractor Beam ---\n";
+    display_answer(1, tractor_beam_points(), 114);
+    //display_answer(2, santas_ship_coords());
+    cout << "\n";
+
+    cout << "--- Day 20: Donut Maze ---\n";
+    display_answer(1, shortest_path_through_portal_maze(), 636);    // Takes forever to complete
+    cout << "\n";
+
+    cout << "--- Day 21: Springdroid Adventure ---\n";
+    display_answer(1, hull_damage_reported(), 19360288);
+    display_answer(2, hull_damage_reported2(), 1143814750);
     cout << "\n";
 }

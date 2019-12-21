@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(adventofcode2019
         main.cpp
+        2darray/2darray.h
         utils.h utils.cpp
         intcode/computer.h intcode/computer.cpp
         intcode/instruction.h intcode/instruction.cpp
@@ -12,7 +13,7 @@ add_executable(adventofcode2019
         intcode/output.h
         intcode/input.h
         intcode/parameter.h
-        map/coords.h
+        map/coords.h map/coords.cpp
         day01/puzzle.h day01/puzzle.cpp
         day02/puzzle.h day02/puzzle.cpp
         day03/puzzle.h day03/puzzle.cpp
@@ -45,4 +46,13 @@ add_executable(adventofcode2019
         day16/phase.h day16/phase.cpp
         day16/signal.h day16/signal.cpp
         day16/puzzle.h day16/puzzle.cpp
-        day17/puzzle.h day17/puzzle.cpp)
+        day17/puzzle.h day17/puzzle.cpp
+        day18/maze.h day18/maze.cpp
+        day18/graph.h day18/graph.cpp
+        day18/puzzle.h day18/puzzle.cpp
+        day19/puzzle.h day19/puzzle.cpp
+        day20/portal_maze.h day20/portal_maze.cpp
+        day20/portal_graph.h day20/portal_graph.cpp
+        day20/puzzle.h day20/puzzle.cpp
+        day21/springdroid.h day21/springdroid.cpp
+        day21/puzzle.h day21/puzzle.cpp)

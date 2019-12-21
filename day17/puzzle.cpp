@@ -3,6 +3,7 @@
 //
 
 #include <fstream>
+#include <queue>
 #include <set>
 #include <sstream>
 #include <vector>
@@ -110,4 +111,50 @@ int sum_alignment_parameters()
         alignment += x * y;
 
     return alignment;
+}
+
+struct vacuum_robot_input
+{
+    queue<char> chars;
+
+    vacuum_robot_input& operator<<(const string& str) {
+        for (char c : str)
+            chars.push(c);
+        return *this;
+    }
+
+    void operator>>(int& ref) {
+        if (chars.empty())
+            throw no_input_exception();
+
+        ref = chars.front();
+        chars.pop();
+    }
+};
+
+int collected_space_dust()
+{
+    intcode code = read("day17/res/input.txt");
+    code[0] = 2;
+
+    /*
+     * TODO:
+     * 1. calculate all possible paths in the graph
+     * 2. translate path to series of commands
+     * 3. for every series, try to splice it to three patterns,
+     * 4. from those, check if length of every pattern doesn't exceed 20
+     */
+
+    vacuum_robot_input in;
+    in << "A,A,B,C,B,C,B,C,B,A" << "\n";
+    in << "R,6,L,12,R,6" << "\n";
+    in << "L,12,R,6,L,8,L,12" << "\n";
+    in << "R,12,L,10,L,10" << "\n";
+    in << "n" << "\n";
+
+    output out;
+    intcode_machine_t<vacuum_robot_input, output> cpu { in, out };
+    cpu.run_code(code);
+
+    return out.values.back();
 }

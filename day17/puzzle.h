@@ -5,3 +5,4 @@
 #pragma once
 
 int sum_alignment_parameters();
+int collected_space_dust();

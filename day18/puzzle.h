@@ -2,7 +2,6 @@
 // Created by rnetuka on 18.12.19.
 //
 
-#ifndef ADVENTOFCODE2019_PUZZLE_H
-#define ADVENTOFCODE2019_PUZZLE_H
+#pragma once
 
-#endif //ADVENTOFCODE2019_PUZZLE_H
+int shortest_path_for_all_keys();
