@@ -108,29 +108,25 @@
  * (For example, if noun=12 and verb=2, the answer would be 1202.)
  */
 
-#include <functional>
-
 #include "../intcode/computer.h"
 
 using namespace std;
-using namespace intcd;
-
-using operation = function<int(int, int)>;
+using namespace intcode;
 
 
-int run_code(intcode code, int noun, int verb)
+int run_code(code code, int noun, int verb)
 {
     code[1] = noun;
     code[2] = verb;
 
-    intcode_machine computer;
+    machine computer;
     computer.run_code(code);
     return computer.get_code()[0];
 }
 
 int value_at_position_0()
 {
-    intcode code = read("day02/res/input.txt");
+    code code = read("day02/res/input.txt");
     int noun = 12;
     int verb = 2;
     return run_code(code, noun, verb);
@@ -138,9 +134,9 @@ int value_at_position_0()
 
 int decode_output()
 {
-    intcode code = read("day02/res/input.txt");
+    code code = read("day02/res/input.txt");
 
-    int expected_result = 19690720;
+    int expected_result = 19'690'720;
 
     for (int noun = 0; noun < 99; noun++)
         for (int verb = 0; verb < 99; verb++)

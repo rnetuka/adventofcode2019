@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace intcd {
+namespace intcode {
 
     enum parameter_mode
     {
@@ -15,8 +15,18 @@ namespace intcd {
 
     struct parameter
     {
-        const long value;
-        const int mode;
+        long value;
+        int mode;
+
+        parameter() : value { 0 }, mode { 0 } {
+
+        }
+        parameter(long value, int mode) : value { value }, mode { mode } {
+
+        }
+        parameter(const parameter& other) : value { other.value }, mode { other.mode } {
+
+        }
     };
 
 }

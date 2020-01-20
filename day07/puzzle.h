@@ -4,8 +4,27 @@
 
 #pragma once
 
-namespace day7 {
+#include "puzzle.h"
 
-    int max_thurster_signal(int min_phase, int max_phase);
+int max_thurster_signal1();
+int max_thurster_signal2();
 
-}
+struct day7 : public puzzle {
+
+    std::optional<std::string> expected_answer(int n) const override {
+        switch (n) {
+            case 1:  return "262086";
+            case 2:  return "5371621";
+            default: return std::nullopt;
+        }
+    }
+
+    std::string answer(int n) const override {
+        switch (n) {
+            case 1:  return std::to_string(max_thurster_signal1());
+            case 2:  return std::to_string(max_thurster_signal2());
+            default: return no_answer;
+        }
+    }
+
+};

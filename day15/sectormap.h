@@ -8,6 +8,9 @@
 #include <ostream>
 #include <vector>
 
+#include "../map/coords.h"
+#include "../graph/graph.h"
+
 enum tile_value
 {
     wall = 0,
@@ -15,7 +18,7 @@ enum tile_value
     oxygen_system = 2
 };
 
-struct tile
+struct location
 {
     int x, y;
     int value = -1;
@@ -44,7 +47,7 @@ public:
 
     tile_value get(int x, int y) const;
 
-    std::optional<std::pair<int, int>> find_oxygen_system() const;
+    std::optional<coords> find_oxygen_system() const;
     bool is_free_to_move(int x, int y) const;
 
     friend class sector_map_builder;
@@ -55,7 +58,7 @@ public:
 class sector_map_builder
 {
 private:
-    std::vector<tile> nodes;
+    std::vector<location> nodes;
     int min_x = 0;
     int max_x = 0;
     int min_y = 0;
@@ -68,3 +71,5 @@ public:
 
     sector_map create_sector_map() const;
 };
+
+graph::graph<coords> graph_from_map(const sector_map& map);

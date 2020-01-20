@@ -5,64 +5,40 @@
 #pragma once
 
 #include <algorithm>
+#include <map>
+#include <set>
 #include <string>
 #include <sstream>
 #include <vector>
 
-namespace day10 {
+#include "../graph/graph.h"
+#include "../map/coords.h"
+#include "../utils.h"
 
-    constexpr char asteroid_sign = '#';
+using asteroid = coords;
+using asteroid_graph = graph::graph<asteroid>;
 
-    struct asteroid {
-        int x, y;
-    };
+constexpr char asteroid_sign = '#';
 
-    bool operator==(const asteroid& a, const asteroid& b) {
-        return a.x == b.x && a.y == b.y;
-    }
 
-    bool operator!=(const asteroid& a, const asteroid& b) {
-        return !(a == b);
-    }
+class asteroid_map {
+public:
+    const int width;
+    const int height;
+    const int max_x = width  - 1;
+    const int max_y = height - 1;
 
-    struct space_map {
-        int width;
-        int height;
-        std::vector<asteroid> asteroids;
+    asteroid_graph graph;
 
-        auto begin() -> decltype(asteroids.begin()) {
-            return asteroids.begin();
-        }
+private:
+    asteroid_map(int width, int height);
 
-        auto end() -> decltype(asteroids.end()) {
-            return asteroids.end();
-        }
-    };
+public:
+    static asteroid_map parse(const std::string& str);
 
-    space_map read_asteroids(const std::string& text) {
-        std::vector<asteroid> asteroids;
+    const std::set<asteroid>& asteroids() const;
+    void remove(const asteroid& asteroid);
+    std::set<asteroid> asteroids_visible_from(const asteroid& a) const;
+};
 
-        std::stringstream stream { text };
-        std::string line;
-        int width = 0;
-        int y = 0;
-
-        while (stream) {
-            stream >> line;
-            width = std::max(width, (int) line.length());
-
-            for (int x = 0; x < line.length(); x++)
-                if (line[x] == asteroid_sign)
-                    asteroids.push_back({ x, y });
-            y++;
-            line = "";
-        }
-        return { width, y + 1, asteroids };
-    }
-
-    space_map space_map = read_asteroids(read_file("day10/res/input.txt"));
-
-    const int asteroid_map_max_x = space_map.width - 1;
-    const int asteroid_map_max_y = space_map.height - 1;
-
-}
+inline auto space_map = asteroid_map::parse(read_file("day10/res/input.txt"));

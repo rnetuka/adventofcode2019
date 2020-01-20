@@ -48,84 +48,46 @@
  * Beat the game by breaking all the blocks. What is your score after the last block is broken?
  */
 
-#include "../intcode/computer.h"
-#include "game.h"
+#include <iostream>
+
+#include "console.h"
 #include "joystick.h"
 
-using namespace intcd;
 using namespace std;
 
-namespace day13 {
 
-    game_t draw_game()
-    {
-        intcode code = read("day13/res/input.txt");
+int count_block_tiles()
+{
+    gaming_console console;
+    console.play_game();
+    return count_tiles(console.game(), block);
+}
 
-        game_t game;
-        output output;
+int beat_the_game()
+{
+    gaming_console console;
+    console.computer.in = [&console]() {
+        coords ball   = console.game().ball();
+        coords paddle = console.game().paddle();
 
-        intcode_machine computer { null_input, output };
-        computer.add_output_listener([&game, &output](int value)
-        {
-            if (output.values.size() == 3)
-            {
-                int x = output.values[0];
-                int y = output.values[1];
-                int id = output.values[2];
-                game.set_tile(x, y, (tile) id);
-                output.clear();
-            }
-        });
-        computer.run_code(code);
-        return game;
-    }
+        if (paddle.x < ball.x) {
+            return joystick_position::right;
+        }
+        else if (paddle.x > ball.x) {
+            return joystick_position::left;
+        }
+        else
+            return joystick_position::center;
+    };
+    console.insert_coin();
+    console.play_game();
+    return console.game().score();
+}
 
-    int count_block_tiles()
-    {
-        game_t game = draw_game();
-        return count_tiles(game, block);
-    }
-
-    int beat_the_game()
-    {
-        intcode code = read("day13/res/input.txt");
-        code[0] = 2;
-
-        game_t game;
-
-        joystick_t joystick;
-        output output;
-
-        intcode_machine_t<joystick_t, struct output> computer { joystick, output };
-        computer.add_input_listener([&game, &joystick]()
-        {
-            coords ball_pos = ball_position(game);
-            coords paddle_pos = paddle_position(game);
-
-            if (paddle_pos.x < ball_pos.x)
-                joystick.position = right;
-            else if (paddle_pos.x > ball_pos.x)
-                joystick.position = left;
-            else
-                joystick.position = center;
-        });
-        computer.add_output_listener([&game, &output](int value)
-        {
-            if (output.values.size() == 3)
-            {
-                int x = output.values[0];
-                int y = output.values[1];
-
-                if (x == -1 && y == 0)
-                    game.score = output.values[2];
-                else
-                    game.set_tile(x, y, (tile) output.values[2]);
-
-                output.clear();
-            }
-        });
-        computer.run_code(code);
-        return game.score;
-    }
-
+void play()
+{
+    gaming_console console { cout };
+    console.computer.in = joystick();
+    console.insert_coin();
+    console.play_game();
 }

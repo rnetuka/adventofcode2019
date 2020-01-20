@@ -103,74 +103,46 @@
  */
 
 #include <algorithm>
-#include <fstream>
+#include <set>
 
+#include "../map/coords.h"
 #include "../intcode/computer.h"
 #include "robot.h"
 #include "spaceship.h"
 
-using namespace intcd;
+using namespace intcode;
 using namespace std;
 
-namespace day11 {
 
-    using robor_cpu = intcode_machine_t<scanner_t, robot_output_t>;
+const int init_x = spaceship_area_width  / 2;
+const int init_y = spaceship_area_height / 2;
 
-    constexpr int init_x = spaceship_area_width  / 2;
-    constexpr int init_y = spaceship_area_height / 2;
 
-    const intcode code = read("day11/res/input.txt");
+int count_painted_panels() {
+    painting_robot robot;
+    deploy_robot(init_x, init_y);
 
-    struct coords {
-        int x, y;
-    };
+    set<coords> painted_coords;
 
-    bool operator==(const coords& a, const coords& b) {
-        return a.x == b.x && a.y == b.y;
-    }
+    robot.set_instruction_listener([&painted_coords](int color, int turn) {
+        int x = ship.robot_x;
+        int y = ship.robot_y;
+        int original_color = ship.area[x][y];
+        if (color != original_color)
+            painted_coords.insert({ x, y });
+    });
+    robot.boot_up();
+    return painted_coords.size();
+}
 
-    int count_painted_panels()
-    {
-        robot_output_t output;
-        robor_cpu cpu { scanner, output };
+string get_registration_identifier() {
+    repaint_black(ship);
 
-        robot_t robot;
-        deploy_robot(init_x, init_y);
+    painting_robot robot;
+    deploy_robot(init_x, init_y);
 
-        vector<coords> painted_coords;
+    ship.area[init_x][init_y] = white;
 
-        output.listeners.emplace_back([&painted_coords](int color, int turn) {
-            int x = ship.robot_x;
-            int y = ship.robot_y;
-            int original_color = ship.area[x][y];
-            if (color != original_color) {
-                coords c { x, y };
-                if (find(painted_coords.begin(), painted_coords.end(), c) == painted_coords.end()) {
-                    painted_coords.push_back(c);
-                }
-            }
-        });
-        output.listeners.emplace_back([&robot](int color, int turn) { handle_robot(robot, color, turn); });
-
-        cpu.run_code(code);
-        return painted_coords.size();
-    }
-
-    string get_registration_identifier()
-    {
-        repaint_black(ship);
-
-        robot_output_t output;
-        robor_cpu cpu { scanner, output };
-
-        robot_t robot;
-        deploy_robot(init_x, init_y);
-        ship.area[init_x][init_y] = white;
-
-        output.listeners.emplace_back([&robot](int color, int turn) { handle_robot(robot, color, turn); });
-
-        cpu.run_code(code);
-        return registration_id(ship);
-    }
-
+    robot.boot_up();
+    return registration_id(ship);
 }

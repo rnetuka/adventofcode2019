@@ -97,7 +97,7 @@ string read_file(const string& path)
     while (stream)
     {
         string line;
-        stream >> line;
+        getline(stream, line);
         result += line;
         result += "\n";
     }

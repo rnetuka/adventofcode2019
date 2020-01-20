@@ -13,7 +13,7 @@ springscript::springscript(const initializer_list<string>& commands)
         this->commands.push_back(command + "\n");
 }
 
-void springscript::operator>>(int& ref)
+char springscript::operator()()
 {
     string command = commands[i];
     char c = command[j];
@@ -24,5 +24,5 @@ void springscript::operator>>(int& ref)
     else {
         j++;
     }
-    ref = c;
+    return c;
 }

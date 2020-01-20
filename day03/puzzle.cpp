@@ -3,7 +3,10 @@
 //
 
 /*
+ * https://adventofcode.com/2019/day/3
+ *
  * --- Day 3: Crossed Wires ---
+ *
  * The gravity assist was successful, and you're well on your way to the Venus refuelling station. During the rush back
  * on Earth, the fuel management system wasn't completely installed, so that's next on the priority list.
  *
@@ -52,9 +55,11 @@
  * U62,R66,U55,R34,D71,R55,D58,R83 = distance 159
  * R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51
  * U98,R91,D20,R16,D67,R40,U7,R15,U6,R7 = distance 135
+ *
  * What is the Manhattan distance from the central port to the closest intersection?
  *
  * --- Part Two ---
+ *
  * It turns out that this circuit is very timing-sensitive; you actually need to minimize the signal delay.
  *
  * To do this, calculate the number of steps each wire takes to reach each intersection; choose the intersection where
@@ -92,6 +97,7 @@
  */
 
 #include <algorithm>
+#include <functional>
 #include <set>
 #include <vector>
 
@@ -101,62 +107,56 @@
 using namespace std;
 
 
-const vector<coords>& wireA = read_wire("day03/res/wire1.txt");
-const vector<coords>& wireB = read_wire("day03/res/wire2.txt");
-
+static const wire& wire1 = read_wire("day03/res/wire1.txt");
+static const wire& wire2 = read_wire("day03/res/wire2.txt");
 
 vector<coords> intersection_points()
 {
-    vector<coords> intersection(wireA.size());
+    vector<coords> intersections { max(wire1.size(), wire2.size()) };
 
-    set<coords> wireA_points { wireA.begin() + 1, wireA.end() };
-    set<coords> wireB_points { wireB.begin() + 1, wireB.end() };
+    set<coords> wire1_points { wire1.begin() + 1, wire1.end() };
+    set<coords> wire2_points { wire2.begin() + 1, wire2.end() };
 
     auto it = set_intersection(
-            wireA_points.begin(), wireA_points.end(),
-            wireB_points.begin(), wireB_points.end(),
-            intersection.begin());
+            wire1_points.begin(), wire1_points.end(),
+            wire2_points.begin(), wire2_points.end(),
+            intersections.begin());
 
-    intersection.resize(it - intersection.begin());
-    return intersection;
+    intersections.resize(it - intersections.begin());
+    return intersections;
 }
 
 int distance(const coords& a, const coords& b) {
     return abs(a.x - b.x) + abs(a.y - b.y);
 }
 
-int steps_to_reach_point(const vector<coords>& wire, const coords& point)
-{
+int steps_to_reach_point(const wire& wire, const coords& point) {
     auto it = find(wire.begin(), wire.end(), point);
 
     if (it == wire.end())
         throw logic_error("Wire doesn't reach specified point");
 
-    return distance(wire.begin(), it);
+    return it - wire.begin();
 }
 
-int steps_to_reach_intersection(const coords& intersection) {
-    return steps_to_reach_point(wireA, intersection) + steps_to_reach_point(wireB, intersection);
-}
+int closest_intersection(const function<int(const coords& point)>& method) {
+    auto intersections = intersection_points();
 
-int closest_intersection_distance()
-{
-    auto points = intersection_points();
-
-    coords closest = *min_element(points.begin(), points.end(), [](const coords& a, const coords& b) {
-        return distance(a, central_point) < distance(b, central_point);
+    coords closest = *min_element(intersections.begin(), intersections.end(), [&method](const coords& a, const coords& b) {
+        return method(a) < method(b);
     });
 
-    return distance(closest, central_point);
+    return method(closest);
 }
 
-int min_steps_to_reach_intersection()
-{
-    auto points = intersection_points();
-
-    coords closest = *min_element(points.begin(), points.end(), [](const coords& a, const coords& b) {
-        return steps_to_reach_intersection(a) < steps_to_reach_intersection(b);
+int closest_intersection_distance() {
+    return closest_intersection([](const coords& intersection) {
+        return distance(central_point, intersection);
     });
+}
 
-    return steps_to_reach_intersection(closest);
+int min_steps_to_reach_intersection() {
+    return closest_intersection([](const coords& intersection) {
+        return steps_to_reach_point(wire1, intersection) + steps_to_reach_point(wire2, intersection);
+    });
 }

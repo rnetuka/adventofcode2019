@@ -2,68 +2,67 @@
 // Created by rnetuka on 13.12.19.
 //
 
+#include <iostream>
+
 #include "game.h"
 
 using namespace std;
 
-namespace day13 {
 
-    void game_t::set_tile(int x, int y, tile tile) {
-        width  = max(width,  x + 1);
-        height = max(height, y + 1);
+void game_t::set_tile(int x, int y, tile tile) {
+    width_  = max(width_,  x + 1);
+    height_ = max(height_, y + 1);
 
-        tiles.resize(width);
-        for (auto& column : tiles)
-            column.resize(height);
+    tiles.resize(width_);
+    for (auto& column : tiles)
+        column.resize(height_);
 
-        tiles[x][y] = tile;
-    }
+    tiles[x][y] = tile;
+}
 
-    ostream& operator<<(ostream& stream, const game_t& game) {
-        for (int y = 0; y < game.height; y++) {
-            for (int x = 0; x < game.width; x++) {
-                switch (game.tiles[x][y]) {
-                    case empty:  stream << ' '; break;
-                    case wall:   stream << '+'; break;
-                    case block:  stream << 'o'; break;
-                    case paddle: stream << '_'; break;
-                    case ball:   stream << '*'; break;
-                }
-            }
-            stream << "\n";
-        }
-        return stream;
-    }
+void game_t::set_score(int score) {
+    score_ = score;
+}
 
-    ostream& operator<<(ostream& stream, const coords& coords) {
-        return stream << "[" << coords.x << ", " << coords.y << "]";
-    }
+int count_tiles(const game_t& game, tile tile) {
+    int count = 0;
 
-    int count_tiles(const game_t& game, tile tile) {
-        int count = 0;
+    for (int x = 0; x < game.width(); x++)
+        for (int y = 0; y < game.height(); y++)
+            if (game.tile_at(x, y) == tile)
+                count++;
 
-        for (int x = 0; x < game.width; x++)
-            for (int y = 0; y < game.height; y++)
-                if (game.tiles[x][y] == tile)
-                    count++;
+    return count;
+}
 
-        return count;
-    }
+coords find_tile(const game_t& game, tile tile) {
+    for (int x = 0; x < game.width(); x++)
+        for (int y = 0; y < game.height(); y++)
+            if (game.tile_at(x, y) == tile)
+                return { x, y };
+    return { -1, -1 };
+}
 
-    coords tile_position(const game_t& game, tile tile) {
-        for (int x = 0; x < game.width; x++)
-            for (int y = 0; y < game.height; y++)
-                if (game.tiles[x][y] == tile)
-                    return { x, y };
-        return { -1, -1 };
-    }
+coords game_t::ball() {
+    return find_tile(*this, tile::ball);
+}
 
-    coords ball_position(const game_t& game) {
-        return tile_position(game, ball);
-    }
+coords game_t::paddle() {
+    return find_tile(*this, tile::paddle);
+}
 
-    coords paddle_position(const game_t& game) {
-        return tile_position(game, paddle);
-    }
+tile game_t::tile_at(int x, int y) const {
+    return tiles[x][y];
+}
 
+int game_t::width() const {
+    return width_;
+}
+
+int game_t::height() const {
+    return height_;
+}
+
+int game_t::score() const {
+    return score_;
 }

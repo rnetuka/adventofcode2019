@@ -4,7 +4,12 @@
 
 #pragma once
 
-using value_t = long long;
-using addr_t = int;
+#include <vector>
 
-using intcode = std::vector<value_t>;
+namespace intcode {
+
+    using value_t = long long;
+    using addr_t = int;
+    using code = std::vector<value_t>;
+
+}

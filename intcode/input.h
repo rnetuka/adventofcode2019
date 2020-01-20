@@ -4,37 +4,26 @@
 
 #pragma once
 
-#include <utility>
 #include <initializer_list>
 #include <deque>
 #include <stdexcept>
 
-namespace intcd {
+#include "memory.h"
 
-    class no_input_exception : public std::logic_error {
-    public:
-        no_input_exception() : std::logic_error("No input available") {
+namespace intcode {
 
-        }
+    struct no_input_exception : public std::logic_error {
+        no_input_exception();
     };
 
 
-    struct input
-    {
-        std::deque<int> values;
-
-        input(std::initializer_list<int> init_list) : values { init_list } {
-
-        }
-
-        void operator>>(int& ref)
-        {
-            if (values.empty())
-                throw no_input_exception();
-
-            ref = values.front();
-            values.pop_front();
-        }
+    class input {
+        std::deque<value_t> values;
+    public:
+        input() = default;
+        input(std::initializer_list<value_t> init_list);
+        value_t operator()();
+        void operator<<(value_t value);
     };
 
     inline input null_input { };

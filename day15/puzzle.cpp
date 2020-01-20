@@ -151,17 +151,16 @@
 #include <string>
 
 #include "../intcode/computer.h"
-#include "graph.h"
 #include "sectormap.h"
 
-using namespace intcd;
+using namespace intcode;
 using namespace std;
 
 
 struct command
 {
     int id;
-    int dx, dy = 0;
+    int dx = 0, dy = 0;
     bool backtrack = false;
 };
 
@@ -200,7 +199,7 @@ struct movement_commands
 {
     queue<command> commands;
 
-    void operator>>(int &ref)
+    value_t operator()()
     {
         if (commands.empty())
             throw no_input_exception();
@@ -208,9 +207,9 @@ struct movement_commands
         command command = commands.front();
         commands.pop();
         if (command.backtrack)
-            ref = oposite(command).id;
+            return oposite(command).id;
         else
-            ref = command.id;
+            return command.id;
     }
 
     void operator<<(const command& order) {
@@ -223,8 +222,15 @@ struct repair_droid
     int x = 0;
     int y = 0;
     movement_commands commands;
-    output out;
-    intcode_machine_t<movement_commands, output> cpu { commands, out };
+    intcode::computer cpu;
+
+
+    repair_droid() {
+        cpu.set_code(read("day15/res/input.txt"));
+        cpu.in = [this]() {
+            return commands();
+        };
+    }
 
 
     int move(const command& command)
@@ -236,7 +242,7 @@ struct repair_droid
         }
         catch (const no_input_exception& ex)
         {
-            int result = out.values.front();
+            int result = cpu.out.front();
 
             if (result != wall) {
                 if (command.backtrack) {
@@ -248,7 +254,7 @@ struct repair_droid
                     y += command.dy;
                 }
             }
-            out.clear();
+            cpu.out.clear();
             return result;
         }
     }
@@ -269,7 +275,6 @@ void push_commands(const command& move, stack<command>& commands)
 sector_map scout_sector()
 {
     repair_droid droid;
-    droid.cpu.set_code(read("day15/res/input.txt"));
 
     sector_map_builder map_builder;
     map_builder.add(droid.x, droid.y, ::empty);
@@ -305,7 +310,7 @@ sector_map scout_sector()
 
     auto map = map_builder.create_sector_map();
 
-    fstream file { "day15/res/sector_map.txt" };
+    fstream file { "day15/res/sector_map.txt", ios::out };
     file << map;
     file.close();
 
@@ -314,43 +319,37 @@ sector_map scout_sector()
 
 int steps_to_oxygen_storage()
 {
-    auto map = scout_sector();
-    auto graph = graph::from_map(map);
-    int droid_x = 0;
-    int droid_y = 0;
-    auto [oxygen_system_x, oxygen_system_y] = *map.find_oxygen_system();
-    return graph.shortest_path(droid_x, droid_y, oxygen_system_x, oxygen_system_y);
+    auto sector_map = scout_sector();
+    auto graph = graph_from_map(sector_map);
+    coords start { 0, 0 };
+    coords oxygen_system = *sector_map.find_oxygen_system();
+    return graph.shortest_path(start, oxygen_system);
 }
 
 int minutes_to_fill_with_oxygen()
 {
     auto sector_map = scout_sector();
-    auto graph = graph::from_map(sector_map);
-    auto [oxygen_system_x, oxygen_system_y] = *sector_map.find_oxygen_system();
+    auto graph = graph_from_map(sector_map);
+    coords oxygen_system = *sector_map.find_oxygen_system();
 
-    const node& oxygen_system = graph.get(oxygen_system_x, oxygen_system_y);
-
-    set<node> oxygen_spreading_nodes;
+    set<coords> oxygen_spreading_nodes;
     oxygen_spreading_nodes.insert(oxygen_system);
 
-    map<node, bool> oxygen;
+    map<coords, bool> oxygen;
     oxygen[oxygen_system] = true;
 
     int minutes = 0;
 
     while (true)
     {
-        set<node> next_oxygen_spreading_nodes;
+        set<coords> next_oxygen_spreading_nodes;
 
-        for (const node& node : oxygen_spreading_nodes)
-            for (auto [neighbor_x, neighbor_y] : node.neighbors)
-            {
-                auto& neighbor = graph.get(neighbor_x, neighbor_y);
+        for (auto& node : oxygen_spreading_nodes)
+            for (auto& neighbor : graph.neighbors_of(node))
                 if (! oxygen[neighbor]) {
                     oxygen[neighbor] = true;
                     next_oxygen_spreading_nodes.insert(neighbor);
                 }
-            }
 
         if (next_oxygen_spreading_nodes.empty())
             break;

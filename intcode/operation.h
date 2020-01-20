@@ -11,7 +11,7 @@
 #include "memory.h"
 #include "parameter.h"
 
-namespace intcd {
+namespace intcode {
 
     using calculation = std::function<value_t(value_t, value_t)>;
     using check       = std::function<bool(value_t)>;
@@ -55,6 +55,6 @@ namespace intcd {
         operation(int code, std::vector<parameter>&& parameters);
     };
 
-    operation parse_operation(const intcode& code, int i);
+    operation parse_operation(const code& code, int i);
 
 }

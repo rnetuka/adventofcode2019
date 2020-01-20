@@ -6,7 +6,7 @@
 
 #include <string>
 
-namespace intcd {
+namespace intcode {
 
     constexpr int opcode_length = 2;
     constexpr int instruction_length = 5;

@@ -6,6 +6,7 @@
  * https://adventofcode.com/2019/day/8
  *
  * --- Day 8: Space Image Format ---
+ *
  * The Elves' spirits are lifted when they realize you have an opportunity to reboot one of their Mars rovers, and so
  * they are curious if you would spend a brief sojourn on Mars. You land your ship near the rover.
  *
@@ -39,6 +40,7 @@
  * the fewest 0 digits. On that layer, what is the number of 1 digits multiplied by the number of 2 digits?
  *
  * --- Part Two ---
+ *
  * Now you're ready to decode the image. The image is rendered by stacking the layers and aligning the pixels with
  * the same positions in each layer. The digits indicate the color of the corresponding pixel: 0 is black, 1 is white,
  * and 2 is transparent.
@@ -83,87 +85,47 @@
 
 using namespace std;
 
-namespace day8 {
 
-    constexpr int image_width = 25;
-    constexpr int image_height = 6;
+vector<layer> load_layers() {
+    string data = read_file("day08/res/input.txt");
+    int layer_count = data.size() / layer_size;
 
-    constexpr int layer_size = image_width * image_height;
-
-    enum color {
-        black = 0,
-        white = 1,
-        transparent = 2
-    };
-
-    vector<layer> load_layers() {
-        string data = read_lines<string>("day08/res/input.txt")[0];
-        int layer_count = data.size() / layer_size;
-
-        vector<layer> layers;
-        for (int i = 0; i < layer_count; i++) {
-            layer layer;
-            for (char c : data.substr(i * layer_size, layer_size))
-                layer.push_back(c - '0');
-            layers.push_back(layer);
-        }
-        return layers;
-    }
-
-    const vector<layer> layers = load_layers();
-
-    int count_digits(const layer& layer, int digit) {
-        int count = 0;
-        for (int color : layer)
-            if (color == digit)
-                count++;
-        return count;
-    }
-
-    void operator&=(layer& top, const layer& bottom) {
-        for (int i = 0; i < layer_size; i++) {
-            if (top[i] == transparent)
-                top[i] = bottom[i];
-        }
-    }
-
-    image flatten_layers(const vector<layer>& layers) {
-        layer result = layers[0];
-        for (int i = 1; i < layers.size(); i++)
-            result &= layers[i];
-
-        return { result };
-    }
-
-    image negative(const image& img) {
-        image result = img;
-        for (int i = 0; i < layer_size; i++)
-            if (img.data[i] == black || img.data[i] == white)
-                result.data[i] = 1 - img.data[i];
-        return result;
-    }
-
-    ostream& operator<<(ostream& stream, const image& img) {
-        for (int i = 0; i < layer_size; i++) {
-            char ascii = img.data[i] == black ? '#' : ' ';
-            stream << ascii;
-            if ((i + 1) % image_width == 0)
-                stream << "\n";
-        }
-        return stream;
-    }
-
-    int fewest_zero_digit_layer()
+    vector<layer> layers;
+    for (int i = 0; i < layer_count; i++)
     {
-        layer min_layer = *min_element(layers.begin(), layers.end(), [](const layer& a, const layer& b) {
-            return count_digits(a, 0) < count_digits(b, 0);
-        });
-        return count_digits(min_layer, 1) * count_digits(min_layer, 2);
-    }
+        layer layer;
 
-    image decode_message() {
-        image img = flatten_layers(layers);
-        return negative(img);
-    }
+        for (char c : data.substr(i * layer_size, layer_size))
+            layer.push_back(c - '0');
 
+        layers.push_back(layer);
+    }
+    return layers;
+}
+
+const vector<layer> layers = load_layers();
+
+int count_digits(const layer& layer, int digit)
+{
+    int count = 0;
+
+    for (int color : layer)
+        if (color == digit)
+            count++;
+
+    return count;
+}
+
+int fewest_zero_digit_layer()
+{
+    layer min = *min_element(layers.begin(), layers.end(), [](const layer& a, const layer& b) {
+        return count_digits(a, 0) < count_digits(b, 0);
+    });
+    return count_digits(min, 1) * count_digits(min, 2);
+}
+
+image decode_message()
+{
+    image img = flatten(layers);
+    return negative(img);
 }

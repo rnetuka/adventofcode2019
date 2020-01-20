@@ -4,9 +4,27 @@
 
 #pragma once
 
-namespace day4 {
+#include "puzzle.h"
 
-    int password_combinations1();
-    int password_combinations2();
+int password_combinations1();
+int password_combinations2();
 
-}
+struct day4 : public puzzle {
+
+    std::optional<std::string> expected_answer(int n) const override {
+        switch (n) {
+            case 1:  return "1154";
+            case 2:  return "750";
+            default: return std::nullopt;
+        }
+    }
+
+    std::string answer(int n) const override {
+        switch (n) {
+            case 1:  return std::to_string(password_combinations1());
+            case 2:  return std::to_string(password_combinations2());
+            default: return no_answer;
+        }
+    }
+
+};

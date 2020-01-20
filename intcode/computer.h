@@ -15,24 +15,24 @@
 #include "output.h"
 #include "parameter.h"
 
-namespace intcd {
+namespace intcode {
 
-    intcode read(const std::string& path);
+    code read(const std::string& path);
 
 
-    template <typename In, typename Out>
+    template <typename Input>
     class intcode_machine_t
     {
     private:
-        intcode code;
+        intcode::code code;
         int i = 0;
         addr_t relative_base = 0;
-        In*  input_ = nullptr;
-        Out* output_ = nullptr;
+        bool shutdown_requested = false;
         bool finished_ = false;
 
         std::vector<std::function<void()>> input_listeners;
-        std::vector<std::function<void(value_t)>> output_listeners;
+        std::vector<std::function<void()>> output_listeners;
+        std::vector<std::function<void(value_t)>> output_consumers;
 
 
         value_t read(addr_t addr) const {
@@ -63,15 +63,14 @@ namespace intcd {
         }
 
     public:
-        intcode_machine_t() : input_ { nullptr }, output_ { nullptr } {
+        Input  in;
+        output out;
+
+        intcode_machine_t() {
 
         }
 
-        intcode_machine_t(In& input, Out& output) : input_ { &input }, output_ { &output } {
-
-        }
-
-        void run_code(const intcode& code) {
+        void run_code(const intcode::code& code) {
             set_code(code);
             run();
         }
@@ -80,7 +79,7 @@ namespace intcd {
             return finished_ || i >= code.size();
         }
 
-        void set_code(const intcode& code) {
+        void set_code(const intcode::code& code) {
             this->code = code;
             i = 0;
         }
@@ -88,6 +87,9 @@ namespace intcd {
         void run() {
             while (i < code.size())
             {
+                if (shutdown_requested)
+                    break;
+
                 auto operation = parse_operation(code, i);
                 int opcode = operation.code;
                 auto& parameters = operation.parameters;
@@ -107,25 +109,24 @@ namespace intcd {
                     i += 4;
                 }
 
-                else if (opcode == in)
+                else if (opcode == opcode::in)
                 {
                     for (auto& listener : input_listeners)
                         listener();
 
                     auto addr = extract_addr(parameters[0]);
-                    int value = 0;
-                    *input_ >> value;
+                    value_t value = in();
                     write(addr, value);
                     i += 2;
                 }
 
-                else if (opcode == out)
+                else if (opcode == opcode::out)
                 {
                     auto value = extract_value(parameters[0]);
-                    *output_ << value;
+                    out << value;
 
-                    for (auto& listener : output_listeners)
-                        listener(value);
+                    for (auto& consumer : output_consumers)
+                        consumer(value);
 
                     i += 2;
                 }
@@ -165,14 +166,30 @@ namespace intcd {
             input_listeners.push_back(listener);
         }
 
-        void add_output_listener(std::function<void(value_t)> listener) {
+        void add_output_listener(std::function<void()> listener) {
             output_listeners.push_back(listener);
         }
 
-        const intcode& get_code() const {
+        [[ deprecated ]]
+        void add_output_consumer(std::function<void(value_t)> consumer) {
+            output_consumers.push_back(consumer);
+        }
+
+        void set_output_consumer(std::function<void(value_t)> consumer) {
+            output_consumers.clear();
+            output_consumers.push_back(consumer);
+        }
+
+        const intcode::code& get_code() const {
             return code;
+        }
+
+        void shutdown() {
+            shutdown_requested = true;
         }
     };
 
-    using intcode_machine = intcode_machine_t<input, output>;
+    using machine = intcode_machine_t<input>;
+    using computer = intcode_machine_t<std::function<value_t()>>;
+
 }

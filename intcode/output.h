@@ -4,29 +4,31 @@
 
 #pragma once
 
+#include <deque>
 #include <functional>
 #include <vector>
 
 #include "memory.h"
 
-namespace intcd {
+namespace intcode {
 
     using listener_t = std::function<void(value_t)>;
 
     struct output
     {
-        std::vector<value_t> values;
+        std::deque<value_t> values;
         std::vector<listener_t> listeners;
 
-        void operator<<(value_t value) {
-            values.push_back(value);
-            for (auto& listener : listeners)
-                listener(value);
-        }
+        void operator<<(value_t value);
 
-        void clear() {
-            values.clear();
-        }
+        bool empty() const;
+        int size() const;
+        value_t pop_front();
+        value_t front() const;
+        value_t back() const;
+        void clear();
+        value_t operator[](int i) const;
+
     };
 
     inline output std_output;

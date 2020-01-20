@@ -4,37 +4,24 @@
 
 #pragma once
 
+#include <deque>
+
 #include "../intcode/computer.h"
 
-namespace day7 {
 
-    class amplifier_io
-    {
-    private:
-        std::deque<int> values_;
+class amplifier_input
+{
+    std::deque<intcode::value_t> values;
+    std::optional<intcode::output*> supplier;
 
-    public:
-        amplifier_io() = default;
-        amplifier_io(std::initializer_list<int> init_list) : values_ { init_list } {
+public:
+    amplifier_input() = default;
+    amplifier_input(intcode::output& supplier);
 
-        }
+    intcode::value_t operator()();
+    amplifier_input& operator<<(intcode::value_t value);
+};
 
-        void operator<<(int i) {
-            values_.push_back(i);
-        }
+amplifier_input connect(intcode::output& supplier);
 
-        void operator>>(int& ref) {
-            if (values_.empty())
-                throw intcd::no_input_exception();
-            ref = values_.front();
-            values_.pop_front();
-        }
-
-        std::vector<int> values() const {
-            return { values_.front(), values_.back() };
-        }
-    };
-
-    using amplifier = intcd::intcode_machine_t<amplifier_io, amplifier_io>;
-
-}
+using amplifier = intcode::intcode_machine_t<amplifier_input>;

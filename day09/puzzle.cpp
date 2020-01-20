@@ -6,6 +6,7 @@
  * https://adventofcode.com/2019/day/9
  *
  * --- Day 9: Sensor Boost ---
+ *
  * You've just said goodbye to the rebooted rover and left Mars when you receive a faint distress signal coming from
  * the asteroid belt. It must be the Ceres monitoring station!
  *
@@ -56,6 +57,7 @@
  * test mode; it should only output a single value, the BOOST keycode. What BOOST keycode does it produce?
  *
  * --- Part Two ---
+ *
  * You now have a complete Intcode computer.
  *
  * Finally, you can lock on to the Ceres distress signal! You just need to boost your sensors using the BOOST program.
@@ -69,27 +71,24 @@
 
 #include "../intcode/computer.h"
 
-using namespace intcd;
+using namespace intcode;
 using namespace std;
 
-namespace day9 {
 
-    value_t run_code(input input) {
-        intcode code = read("day09/res/input.txt");
-        output output;
-        intcode_machine computer { input, output };
-        computer.run_code(code);
-        if (output.values.size() != 1)
-            throw logic_error("Output contains error messages");
-        return output.values.back();
-    }
+value_t run_boost(int input) {
+    code code = read("day09/res/input.txt");
+    machine machine;
+    machine.in << input;
+    machine.run_code(code);
+    if (machine.out.size() != 1)
+        throw logic_error("Output contains error messages");
+    return machine.out.back();
+}
 
-    value_t get_boost_keycode() {
-        return run_code({ 1 });
-    }
+value_t get_boost_keycode() {
+    return run_boost(1);
+}
 
-    value_t distress_signal_coordinates() {
-        return run_code({ 2 });
-    }
-
+value_t distress_signal_coordinates() {
+    return run_boost(2);
 }

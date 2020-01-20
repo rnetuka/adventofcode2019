@@ -6,6 +6,7 @@
  * https://adventofcode.com/2019/day/7
  *
  * --- Day 7: Amplification Circuit ---
+ *
  * Based on the navigational maps, you're going to need to send more power to your ship's thrusters to reach Santa in
  * time. To do this, you'll need to configure a series of amplifiers already installed on the ship.
  *
@@ -66,6 +67,7 @@
  * the thrusters?
  *
  * --- Part Two ---
+ *
  * It's no good - in this configuration, the amplifiers can't generate a large enough output signal to produce
  * the thrust you'll need. The Elves quickly talk you through rewiring the amplifiers into a feedback loop:
  *
@@ -113,71 +115,81 @@
  * be sent to the thrusters?
  */
 
+#include <algorithm>
+#include <array>
+#include <numeric>
 #include <vector>
 
 #include "../intcode/computer.h"
 #include "amplifier.h"
 
 using namespace std;
-using namespace intcd;
+using namespace intcode;
+using phase = vector<int>;
 
-namespace day7 {
 
-    using phase = vector<int>;
+vector<phase> phase_permutations(int min, int max)
+{
+    vector<phase> permutations;
 
-    vector<phase> phase_combinations(int min, int max) {
-        vector<phase> result;
-        for (int a = min; a < max + 1; a++)
-            for (int b = min; b < max + 1; b++)
-                if (b != a)
-                    for (int c = min; c < max + 1; c++)
-                        if (c != b && c != a)
-                            for (int d = min; d < max + 1; d++)
-                                if (d != c && d != b && d != a)
-                                    for (int e = min; e < max + 1; e++)
-                                        if(e != d && e != c && e != b && e != a)
-                                            result.push_back({ a, b, c, d, e });
-        return result;
+    phase phase(max - min + 1);
+    iota(phase.begin(), phase.end(), min);
+
+    do {
+        permutations.push_back(phase);
     }
+    while (next_permutation(phase.begin(), phase.end()));
 
-    int max_thurster_signal(int min_phase, int max_phase)
+    return permutations;
+}
+
+int max_thurster_signal(int min_phase, int max_phase)
+{
+    code code = read("day07/res/input.txt");
+    value_t max_output = -1;
+
+    for (auto phase : phase_permutations(min_phase, max_phase))
     {
-        intcode code = read("day07/res/input.txt");
-        int max_output = -1;
+        array<amplifier, 5> amplifiers;
 
-        for (auto phase : phase_combinations(min_phase, max_phase)) {
-            amplifier_io a_b { phase[1] };
-            amplifier_io b_c { phase[2] };
-            amplifier_io c_d { phase[3] };
-            amplifier_io d_e { phase[4] };
-            amplifier_io e_a { phase[0], 0 };
+        amplifier& a = amplifiers[0],
+            &b = amplifiers[1],
+            &c = amplifiers[2],
+            &d = amplifiers[3],
+            &e = amplifiers[4];
 
-            amplifier a { e_a, a_b };
-            amplifier b { a_b, b_c };
-            amplifier c { b_c, c_d };
-            amplifier d { c_d, d_e };
-            amplifier e { d_e, e_a };
+        a.in = connect(e.out);
+        b.in = connect(a.out);
+        c.in = connect(b.out);
+        d.in = connect(c.out);
+        e.in = connect(d.out);
 
-            vector<amplifier*> amplifiers = { &a, &b, &c, &d, &e };
+        for (int i = 0; i < amplifiers.size(); i++) {
+            amplifiers[i].set_code(code);
+            amplifiers[i].in << phase[i];
+        }
+        a.in << 0;
 
-            for (auto amp : amplifiers) {
-                amp->set_code(code);
-            }
-
-            while (! e.finished()) {
-                for (auto amp : amplifiers) {
-                    try {
-                        amp->run();
-                    } catch (no_input_exception& ex) {
-                        // no input at current phase
-                        // run next amplifier to possibly produce input values
-                        continue;
-                    }
+        while (! e.finished()) {
+            for (auto& amplifier : amplifiers) {
+                try {
+                    amplifier.run();
+                } catch (no_input_exception& ex) {
+                    // no input at current phase
+                    // run next amplifier to possibly produce input values
+                    continue;
                 }
             }
-            max_output = max(max_output, e_a.values().back());
         }
-        return max_output;
+        max_output = max(max_output, e.out.back());
     }
+    return max_output;
+}
 
+int max_thurster_signal1() {
+    return max_thurster_signal(0, 4);
+}
+
+int max_thurster_signal2() {
+    return max_thurster_signal(5, 9);
 }

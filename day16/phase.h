@@ -4,9 +4,7 @@
 
 #pragma once
 
-#include "sequence.h"
-
-using phase_t = sequence;
+#include "../math/matrix.h"
 
 class phase_generator
 {
@@ -22,4 +20,4 @@ public:
 };
 
 
-phase_t create_phase(int size, int n);
+matrix<int> phase_matrix(int size);

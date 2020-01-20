@@ -6,7 +6,7 @@
 
 using namespace std;
 
-namespace intcd {
+namespace intcode {
 
     string padded_instruction_str(int value)
     {

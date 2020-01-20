@@ -11,7 +11,7 @@
 
 using namespace std;
 
-namespace intcd {
+namespace intcode {
 
     operation::operation(int code) : code { code }, parameters { } {
 
@@ -34,16 +34,18 @@ namespace intcd {
         { rel,     1 }
     };
 
-    operation parse_operation(const intcode& code, int i)
+    operation parse_operation(const code& code, int i)
     {
         instruction instruction { (int) code[i] };
 
         int opcode = instruction.opcode();
         int n = operands[opcode];
 
-        vector<parameter> parameters;
-        for (int j = 0; j < n; j++)
-            parameters.push_back({ code[i + j + 1], instruction.param_mode(j) });
+        vector<parameter> parameters(n);
+        for (int j = 0; j < n; j++) {
+            parameter p { code[i + j + 1], instruction.param_mode(j) };
+            parameters[j] = p;
+        }
 
         return { opcode, move(parameters) };
     }

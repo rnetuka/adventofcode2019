@@ -13,61 +13,58 @@
 
 using namespace std;
 
-namespace day11 {
 
-    const string whitespace_chars = "\t\n\v\f\r ";
+const string whitespace_chars = "\t\n\v\f\r ";
 
-    map<int, char> ascii_colors {
-        { black, ' ' },     // use negative colors for better view
-        { white, '#' }
-    };
+map<int, char> ascii_colors {
+    { black, ' ' },     // use negative colors for better view
+    { white, '#' }
+};
 
-    spaceship_t::spaceship_t() {
-        repaint_black(*this);
-    }
+spaceship_t::spaceship_t() {
+    repaint_black(*this);
+}
 
-    void deploy_robot(int x, int y) {
-        ship.robot_x = x;
-        ship.robot_y = y;
-    }
+void deploy_robot(int x, int y) {
+    ship.robot_x = x;
+    ship.robot_y = y;
+}
 
-    void repaint_black(spaceship_t& spaceship) {
+void repaint_black(spaceship_t& spaceship) {
+    for (int x = 0; x < spaceship_area_width; x++)
         for (int y = 0; y < spaceship_area_height; y++)
-            for (int x = 0; x < spaceship_area_width; x++)
-                ship.area[x][y] = black;
-    }
+            ship.area[x][y] = black;
+}
 
-    vector<string> area_lines(const spaceship_t& spaceship) {
-        vector<string> lines;
-        stringstream stream;
+vector<string> area_lines(const spaceship_t& spaceship) {
+    vector<string> lines;
+    stringstream stream;
 
-        for (int y = 0; y < spaceship_area_height; y++) {
-            for (int x = 0; x < spaceship_area_width; x++) {
-                int color = ship.area[x][y];
-                stream << ascii_colors[color];
-            }
-            lines.push_back(stream.str());
-            stream.str("");
+    for (int y = 0; y < spaceship_area_height; y++) {
+        for (int x = 0; x < spaceship_area_width; x++) {
+            int color = ship.area[x][y];
+            stream << ascii_colors[color];
         }
-        return lines;
+        lines.push_back(stream.str());
+        stream.str("");
     }
+    return lines;
+}
 
-    string registration_id(const spaceship_t& spaceship) {
-        vector<string> lines = area_lines(spaceship);
+string registration_id(const spaceship_t& spaceship) {
+    vector<string> lines = area_lines(spaceship);
 
-        int min_i = spaceship_area_width;
-        for (const string& line : lines)
-            if (int i = line.find_first_not_of(whitespace_chars); i != -1)
-                min_i = min(min_i, i);
+    int min_i = spaceship_area_width;
+    for (const string& line : lines)
+        if (int i = line.find_first_not_of(whitespace_chars); i != -1)
+            min_i = min(min_i, i);
 
-        stringstream stream;
-        for (string& line : lines) {
-            line = line.substr(min_i);
-            line.erase(line.find_last_not_of(whitespace_chars) + 1);
-            if (! line.empty())
-                stream << line << "\n";
-        }
-        return stream.str();
+    stringstream stream;
+    for (string& line : lines) {
+        line = line.substr(min_i);
+        line.erase(line.find_last_not_of(whitespace_chars) + 1);
+        if (! line.empty())
+            stream << line << "\n";
     }
-
+    return stream.str();
 }

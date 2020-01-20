@@ -18,9 +18,10 @@ private:
     int j = 0;
 
 public:
+    springscript() = default;
     springscript(const std::initializer_list<std::string>& commands);
 
-    void operator>>(int& ref);
+    char operator()();
 };
 
-using interpreter = intcd::intcode_machine_t<springscript, intcd::output>;
+using interpreter = intcode::intcode_machine_t<springscript>;

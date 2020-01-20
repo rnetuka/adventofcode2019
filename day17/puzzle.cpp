@@ -9,8 +9,9 @@
 #include <vector>
 
 #include "../intcode/computer.h"
+#include "../map/coords.h"
 
-using namespace intcd;
+using namespace intcode;
 using namespace std;
 
 
@@ -59,10 +60,6 @@ struct area_map
     }
 };
 
-struct coords {
-    int x, y;
-};
-
 vector<coords> scaffold_intersections(const area_map& map)
 {
     vector<coords> result;
@@ -89,13 +86,12 @@ vector<coords> scaffold_intersections(const area_map& map)
 
 int sum_alignment_parameters()
 {
-    intcode code = read("day17/res/input.txt");
-    output out;
-    intcode_machine computer { null_input, out };
+    code code = read("day17/res/input.txt");
+    intcode::computer computer;
     computer.run_code(code);
 
     stringstream stream;
-    for (char c : out.values)
+    for (char c : computer.out.values)
         stream << c;
     string str = stream.str();
 
@@ -113,28 +109,32 @@ int sum_alignment_parameters()
     return alignment;
 }
 
-struct vacuum_robot_input
+struct orders
 {
+    static inline string yes = "y";
+    static inline string no = "n";
+
     queue<char> chars;
 
-    vacuum_robot_input& operator<<(const string& str) {
+    orders& operator<<(const string& str) {
         for (char c : str)
             chars.push(c);
         return *this;
     }
 
-    void operator>>(int& ref) {
+    char operator()() {
         if (chars.empty())
             throw no_input_exception();
 
-        ref = chars.front();
+        char value = chars.front();
         chars.pop();
+        return value;
     }
 };
 
 int collected_space_dust()
 {
-    intcode code = read("day17/res/input.txt");
+    code code = read("day17/res/input.txt");
     code[0] = 2;
 
     /*
@@ -145,16 +145,15 @@ int collected_space_dust()
      * 4. from those, check if length of every pattern doesn't exceed 20
      */
 
-    vacuum_robot_input in;
-    in << "A,A,B,C,B,C,B,C,B,A" << "\n";
-    in << "R,6,L,12,R,6" << "\n";
-    in << "L,12,R,6,L,8,L,12" << "\n";
-    in << "R,12,L,10,L,10" << "\n";
-    in << "n" << "\n";
+    orders orders;
+    orders << "A,A,B,C,B,C,B,C,B,A" << "\n";
+    orders << "R,6,L,12,R,6" << "\n";
+    orders << "L,12,R,6,L,8,L,12" << "\n";
+    orders << "R,12,L,10,L,10" << "\n";
+    orders << orders::no << "\n";
 
-    output out;
-    intcode_machine_t<vacuum_robot_input, output> cpu { in, out };
+    intcode_machine_t<struct orders> cpu;
+    cpu.in = orders;
     cpu.run_code(code);
-
-    return out.values.back();
+    return cpu.out.back();
 }

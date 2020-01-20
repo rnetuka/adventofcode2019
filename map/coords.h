@@ -4,9 +4,13 @@
 
 #pragma once
 
+
 struct coords {
     int x, y;
 };
 
 bool operator==(const coords& a, const coords& b);
+bool operator!=(const coords& a, const coords& b);
 bool operator<(const coords& a, const coords& b);
+
+coords operator+(const coords& a, const coords& b);

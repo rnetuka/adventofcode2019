@@ -7,16 +7,10 @@
 
 using namespace std;
 
-namespace intcd {
+namespace intcode {
 
-    intcode read(const string& path) {
+    code read(const string& path) {
         return read_csv_input<value_t>(path);
     }
-
-
-    template <>
-    intcode_machine_t<input, output>::intcode_machine_t() : input_ { &null_input }, output_ { &std_output } {
-
-    };
 
 }

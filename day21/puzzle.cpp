@@ -133,7 +133,7 @@
 #include "../intcode/computer.h"
 #include "springdroid.h"
 
-using namespace intcd;
+using namespace intcode;
 using namespace std;
 
 
@@ -146,19 +146,19 @@ void make_camera_snapshot(const output& out)
 }
 
 bool finished_successfully(const output& out) {
-    return out.values.back() != (char) out.values.back();
+    return out.back() != (char) out.back();
 }
 
 int hull_damage_reported(springscript script) {
-    output out;
-    intcode code = read("day21/res/input.txt");
-    interpreter interpreter { script, out };
+    code code = read("day21/res/input.txt");
+    interpreter interpreter;
+    interpreter.in = script;
     interpreter.run_code(code);
 
-    if (finished_successfully(out))
-        return out.values.back();
+    if (finished_successfully(interpreter.out))
+        return interpreter.out.back();
     else {
-        make_camera_snapshot(out);
+        make_camera_snapshot(interpreter.out);
         return -1;
     }
 }

@@ -5,49 +5,43 @@
 #pragma once
 
 #include <functional>
+#include <optional>
 
-#include "../intcode/memory.h"
+#include "../intcode/computer.h"
 
-namespace day11 {
 
-    enum color
-    {
-        black = 0,
-        white = 1
-    };
+enum color {
+    black = 0,
+    white = 1
+};
 
-    enum direction_t {
-        up,
-        right,
-        down,
-        left
-    };
+enum direction_t {
+    up,
+    right,
+    down,
+    left
+};
 
-    struct robot_t {
-        direction_t direction = up;
-    };
+class painting_robot {
+    using instruction_listener_t = std::function<void(int, int)>;
 
-    struct scanner_t {
-        void operator>>(int& ref);
-    };
+private:
+    intcode::computer cpu;
 
-    inline scanner_t scanner;
+    std::optional<instruction_listener_t> instruction_listener;
 
-    void turn_left(robot_t& robot);
-    void turn_right(robot_t& robot);
-    void move_forward(robot_t& robot);
-    void paint(robot_t& robot, int color);
+    direction_t direction = up;
 
-    using listener_t = std::function<void(int, int)>;
+    void handle_instructions(int color, int turn_instruction);
 
-    struct robot_output_t
-    {
-        std::vector<value_t> values;
-        std::vector<listener_t> listeners;
+public:
+    painting_robot();
 
-        void operator<<(value_t value);
-    };
+    void set_instruction_listener(const instruction_listener_t& listener);
 
-    void handle_robot(robot_t& robot, int color, int turn_instruction);
-
-}
+    void turn_left();
+    void turn_right();
+    void move_forward();
+    void paint(int color);
+    void boot_up();
+};

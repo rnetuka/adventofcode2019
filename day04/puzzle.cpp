@@ -3,7 +3,10 @@
 //
 
 /*
+ * https://adventofcode.com/2019/day/4
+ *
  * --- Day 4: Secure Container ---
+ *
  * You arrive at the Venus fuel depot only to discover it's protected by a password. The Elves had written the password
  * on a sticky note, but someone threw it out.
  *
@@ -24,6 +27,7 @@
  * Your puzzle input is 240920-789857.
  *
  * --- Part Two ---
+ *
  * An Elf just remembered one more important detail: the two adjacent matching digits are not part of a larger group of
  * matching digits.
  *
@@ -44,87 +48,76 @@
 using namespace std;
 
 
-namespace day4 {
+constexpr int password_size = 6;
+constexpr int min_password = 240'920;
+constexpr int max_password = 789'857;
 
-    constexpr int password_size = 6;
-    constexpr int min_password = 240920;
-    constexpr int max_password = 789857;
+struct password
+{
+    const int value;
 
-    constexpr int digit_count(int value) {
-        return (int) log10(value) + 1;
+    password(int value) : value { value } {
+
     }
 
-    struct password {
-        const int value;
-        const int size;
-
-        password(int value) : value { value }, size { digit_count(value) } {
-
-        }
-
-        int digit(int i) const
-        {
-            if (i < 0 || i > size)
-                return -1;
-
-            int n = password_size - i - 1;
-            return (int) (value / pow(10, n)) % 10;
-        }
-    };
-
-    bool meets_criteria(const password& password)
+    int digit(int i) const
     {
-        if (password.size != password_size)
+        if (i < 0 || i > password_size)
+            return -1;
+
+        int n = password_size - i - 1;
+        return (int) (value / pow(10, n)) % 10;
+    }
+
+    operator int() const noexcept {
+        return value;
+    }
+};
+
+bool meets_criteria(const password& password)
+{
+    if (password < min_password || password > max_password)
+        return false;
+
+    for (int i = 0; i < password_size - 1; i++)
+        if (password.digit(i) > password.digit(i + 1))
             return false;
 
-        if (password.value < min_password || password.value > max_password)
-            return false;
+    for (int i = 0; i < password_size - 1; i++)
+        if (password.digit(i) == password.digit(i + 1))
+            return true;
 
-        for (int i = 0; i < password_size - 1; i++) {
-            if (password.digit(i) > password.digit(i + 1))
-                return false;
-        }
+    return false;
+}
 
-        for (int i = 0; i < password_size - 1; i++) {
-            if (password.digit(i) == password.digit(i + 1))
+bool meets_additional_criteria(const password& password)
+{
+    if (! meets_criteria(password))
+        return false;
+
+    for (int i = 0; i < password_size - 1; i++)
+        if (password.digit(i) == password.digit(i + 1))
+            if (password.digit(i - 1) != password.digit(i) && password.digit(i + 1) != password.digit(i + 2))
                 return true;
-        }
 
-        return false;
-    }
+    return false;
+}
 
-    bool meets_additional_criteria(const password& password)
-    {
-        if (! meets_criteria(password))
-            return false;
+int password_combinations(const function<bool(const password&)>& predicate)
+{
+    int count = 0;
 
-        for (int i = 0; i < password_size - 1; i++) {
-            if (password.digit(i) == password.digit(i + 1))
-                if (password.digit(i - 1) != password.digit(i) && password.digit(i + 1) != password.digit(i + 2))
-                    return true;
-        }
+    for (int password = min_password; password <= max_password; password++)
+        if (predicate(password))
+            count++;
 
-        return false;
-    }
+    return count;
+}
 
-    int password_combinations(const function<bool(const password&)>& predicate)
-    {
-        int count = 0;
+int password_combinations1() {
+    return password_combinations(meets_criteria);
+}
 
-        for (int password = min_password; password < max_password; password++) {
-            if (predicate(password))
-                count++;
-        }
-
-        return count;
-    }
-
-    int password_combinations1() {
-        return password_combinations(meets_criteria);
-    }
-
-    int password_combinations2() {
-        return password_combinations(meets_additional_criteria);
-    }
-
+int password_combinations2() {
+    return password_combinations(meets_additional_criteria);
 }
